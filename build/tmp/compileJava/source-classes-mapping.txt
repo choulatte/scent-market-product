@@ -1,8 +1,0 @@
-com/choulatte/scentproduct/ScentProductApplication.java
- com.choulatte.scentproduct.ScentProductApplication
-com/choulatte/scentproduct/domain/Product.java
- com.choulatte.scentproduct.domain.Product
- com.choulatte.scentproduct.domain.Product$ProductBuilder
-com/choulatte/scentproduct/domain/InterestedUser.java
- com.choulatte.scentproduct.domain.InterestedUser
- com.choulatte.scentproduct.domain.InterestedUser$InterestedUserBuilder
