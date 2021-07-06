@@ -14,11 +14,11 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "interested_user")
-public class InterestedUser {
+public class Interest {
 
     @Id
     @Column(name = "interested_user_idx")
-    private Long interestedUserIdx;
+    private Long interestedUserId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "interesting_product")
