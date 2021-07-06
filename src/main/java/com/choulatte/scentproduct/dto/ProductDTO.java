@@ -1,10 +1,8 @@
 package com.choulatte.scentproduct.dto;
 
-import com.choulatte.scentproduct.domain.InterestedUser;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.choulatte.scentproduct.domain.Interest;
+import com.choulatte.scentproduct.domain.StatusType;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
@@ -12,15 +10,21 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
+@Builder
 public class ProductDTO {
-    private Long productIdx;
+    private Long productId;
     private String productName;
     private String productDetail;
-    private Long writerIdx;
-    private String writerUsername;
-    private double startPrice;
-    private Date registerDate;
-    private Date lastModifiedDate;
-    private List<InterestedUser> interestedUsers;
+    private Long userId;
+    private String username;
+    private Double startingPrice;
+    private Date registerDatetime;
+    private Date lastModifiedDatetime;
+    private Date startingDatetime;
+    private Date endingDatetime;
+    private Boolean isValid;
+    private Boolean isVisible;
+    private StatusType status;
+    private List<Interest> interests;
+    private BrandDTO brand;
 }

@@ -5,12 +5,18 @@ import com.choulatte.scentproduct.dto.ProductDTO;
 import java.util.List;
 
 public interface ProductService {
-    List<ProductDTO> getUserProductsList(String userIdx);
-    ProductDTO getUserProductDetail(String productIdx);
+    List<ProductDTO> getUserProductsList(Long userId);
+    ProductDTO getUserProductDetail(Long productId);
+    List<ProductDTO> getUserInterestingProductList(Long userId);
 
     List<ProductDTO> getProductsList();
-    ProductDTO getProductDetail(String productIdx);
+    ProductDTO getProductDetail(Long productId);
 
-    void setProduct(String userIdx, String username, ProductDTO productDTO);
-    void deleteProduct(String productIdx);
+    List<ProductDTO> getBrandProducts(Long brandId);
+    List<ProductDTO> getStatusProducts(String status);
+
+    void setProduct(ProductDTO productDTO, Long userIdx, String username);
+    void setProduct(ProductDTO productDTO, Long userIdx, String username, Long productId);
+
+    void deleteProduct(Long productId);
 }
