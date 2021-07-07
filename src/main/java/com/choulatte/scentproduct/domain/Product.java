@@ -65,7 +65,7 @@ public class Product {
     private StatusType status;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    private List<Interest> interests = new ArrayList<>();
+    private final List<Interest> interests = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brand")

@@ -26,5 +26,5 @@ public class Brand {
     private String brandName;
 
     @OneToMany(mappedBy = "brand", fetch = FetchType.EAGER)
-    private List<Product> products = new ArrayList<>();
+    private final List<Product> products = new ArrayList<>();
 }
