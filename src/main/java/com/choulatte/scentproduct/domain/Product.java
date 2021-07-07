@@ -70,4 +70,9 @@ public class Product {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brand")
     private Brand brand;
+
+    public void changeStatus(StatusType status){
+        this.status = status;
+        this.lastModifiedDatetime = new Date();
+    }
 }

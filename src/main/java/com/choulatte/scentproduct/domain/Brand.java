@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "brand")
-public class Brand {
+public class Brand<BrandReposity> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
