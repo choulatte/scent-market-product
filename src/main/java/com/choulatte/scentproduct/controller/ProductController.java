@@ -1,11 +1,14 @@
 package com.choulatte.scentproduct.controller;
 
 import com.choulatte.scentproduct.application.ProductService;
+import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,38 +18,34 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping(value = "")
-    List<ProductDTO> getProducts() {
-        return productService.getProductsList();
+    ResponseEntity<List<ProductDTO>> getProducts() {
+        return ResponseEntity.ok(productService.getProductsList());
     }
 
     @GetMapping(value = "/myitems")
-    List<ProductDTO> getUserProducts(@RequestHeader("userId") String userId) {
-        return productService.getUserProductsList(Long.parseLong(userId));
-    }
-
-    @GetMapping(value = "/interest")
-    List<ProductDTO> getUserInterestingProducts(@RequestHeader("userId") String userId) {
-        return productService.getUserInterestingProductList(Long.parseLong(userId));
+    ResponseEntity<List<ProductDTO>> getUserProducts(@RequestHeader("userId") String userId) {
+        return ResponseEntity.ok(productService.getUserProductsList(Long.parseLong(userId)));
     }
 
     @GetMapping(value = "/{brand}")
-    List<ProductDTO> getBrandProducts(@PathVariable("brand") Long brandId) {
-        return productService.getBrandProducts(brandId);
+    ResponseEntity<List<ProductDTO>> getBrandProducts(@PathVariable("brand") Long brandId) {
+        return ResponseEntity.ok(productService.getBrandProducts(brandId));
     }
 
     @GetMapping(value = "/{status}")
-    List<ProductDTO> getBrandProducts(@PathVariable("status") String status) {
-        return productService.getStatusProducts(status);
+    ResponseEntity<List<ProductDTO>> getBrandProducts(@PathVariable("status") String status) {
+        return ResponseEntity.ok(productService.getStatusProducts(StatusType.valueOf(status)));
     }
 
     @GetMapping(value = "/{id}")
-    ProductDTO getProduct(@PathVariable("id") Long id) {
-        return productService.getProductDetail(id);
+    ResponseEntity<ProductDTO> getProduct(@PathVariable("id") Long id) {
+        return productService.getProductDetail(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 
     @GetMapping(value = "/update/{id}")
-    ProductDTO getUserProduct(@PathVariable("id") Long id) {
-        return productService.getUserProductDetail(id);
+    ResponseEntity<ProductDTO> getUserProduct(@PathVariable("id") Long id) {
+        return productService.getUserProductDetail(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping(value = "/register")

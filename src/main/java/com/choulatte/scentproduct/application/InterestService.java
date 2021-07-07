@@ -1,10 +1,12 @@
 package com.choulatte.scentproduct.application;
 
+import com.choulatte.scentproduct.dto.ProductDTO;
+
 import java.util.List;
 
 public interface InterestService {
-    void setInterest(Long userIdx, Long productIdx);
-    void deleteInterest(Long userIdx, Long productIdx);
-    List<Long> getInterestedUserList(Long productIdx);
-    List<Long> getUserInterestingProductList(Long userIdx);
+    void setInterest(Long userId, Long productId);
+    void deleteInterest(Long userId, Long productId);
+    List<Long> getInterestedUser(Long productId);
+    List<ProductDTO> getUserInterestingProduct(Long userId);
 }
