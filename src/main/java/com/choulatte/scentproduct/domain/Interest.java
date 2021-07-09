@@ -1,5 +1,6 @@
 package com.choulatte.scentproduct.domain;
 
+import com.choulatte.scentproduct.dto.InterestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,10 +18,25 @@ import java.util.Date;
 public class Interest {
 
     @Id
-    @Column(name = "interested_user_idx")
-    private Long interestedUserId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "interest_idx")
+    private Long interestId;
+
+    @Column(name = "user_idx")
+    private Long userId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "interesting_product")
     private Product product;
+
+    @Column(nullable = false, name = "register_datetime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date registeredDatetime;
+
+    public static Interest newInstance(InterestDTO interestDTO, Product product) {
+        return Interest.builder().userId(interestDTO.getUserId())
+                .product(product)
+                .registeredDatetime(new Date())
+                .build();
+    }
 }

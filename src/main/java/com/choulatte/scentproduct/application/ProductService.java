@@ -16,8 +16,8 @@ public interface ProductService {
     List<ProductDTO> getBrandProducts(Long brandId);
     List<ProductDTO> getStatusProducts(StatusType status);
 
-    void setProduct(ProductDTO productDTO, Long userIdx, String username);
-    void setProduct(ProductDTO productDTO, Long userIdx, String username, Long productId);
+    ProductDTO createProduct(ProductDTO productDTO, Long userIdx, String username);
+    ProductDTO updateProduct(ProductDTO productDTO, Long userIdx, String username, Long productId);
 
     void deleteProduct(Long productId);
 }

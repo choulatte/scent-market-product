@@ -1,5 +1,6 @@
 package com.choulatte.scentproduct.domain;
 
+import com.choulatte.scentproduct.dto.ProductDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -55,10 +56,10 @@ public class Product {
     private Date lastModifiedDatetime;
 
     @Column(nullable = false, name = "validation")
-    private Boolean isValid;
+    private Boolean validity;
 
     @Column(nullable = false, name = "visibility")
-    private Boolean isVisible;
+    private Boolean visibility;
 
     @Column(nullable = false, name = "status")
     @Enumerated(EnumType.STRING)
@@ -71,8 +72,32 @@ public class Product {
     @JoinColumn(name = "brand")
     private Brand brand;
 
-    public void changeStatus(StatusType status){
+    public void updateStatus(StatusType status){
         this.status = status;
         this.lastModifiedDatetime = new Date();
+    }
+
+    public void updateValidity(Boolean validity) {
+        this.validity = validity;
+    }
+
+    public void updateVisibility(Boolean visibility) {
+        this.visibility = visibility;
+    }
+
+    public static Product newInstance(ProductDTO productDTO) {
+        return Product.builder().productName(productDTO.getProductName())
+                .productDetail(productDTO.getProductDetail())
+                .userId(productDTO.getUserId())
+                .username(productDTO.getUsername())
+                .startingPrice(productDTO.getStartingPrice())
+                .registeredDatetime(productDTO.getRegisterDatetime())
+                .startingDatetime(productDTO.getStartingDatetime())
+                .endingDatetime(productDTO.getEndingDatetime())
+                .lastModifiedDatetime(new Date())
+                .validity(true)
+                .visibility(true)
+                .status(StatusType.REGISTERED)
+                .brand(Brand.newInstance(productDTO.getBrand())).build();
     }
 }

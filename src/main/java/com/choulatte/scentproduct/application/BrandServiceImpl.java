@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -15,22 +17,17 @@ public class BrandServiceImpl implements BrandService {
     private final BrandRepository brandRepository;
 
     @Override
-    public void setBrand(BrandDTO brandDTO) {
-
+    public BrandDTO createBrand(BrandDTO brandDTO) {
+        return new BrandDTO(brandRepository.save(Brand.newInstance(brandDTO)));
     }
 
     @Override
-    public void updateBrand(BrandDTO brandDTO) {
-
-    }
-
-    @Override
-    public void deleteBrand(Long brandId) {
-
+    public BrandDTO updateBrand(BrandDTO brandDTO) {
+        return new BrandDTO((brandRepository.save(Brand.newInstance(brandDTO))));
     }
 
     @Override
     public List<BrandDTO> getBrands() {
-        return null;
+        return brandRepository.findAll().stream().map(BrandDTO::new).collect(Collectors.toList());
     }
 }

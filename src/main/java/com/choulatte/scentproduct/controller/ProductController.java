@@ -50,12 +50,12 @@ public class ProductController {
 
     @PostMapping(value = "/register")
     void setProduct(@RequestBody ProductDTO productDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username) {
-        productService.setProduct(productDTO, Long.parseLong(userIdx), username);
+        productService.createProduct(productDTO, Long.parseLong(userIdx), username);
     }
 
     @PutMapping(value = "/update/{id}")
     void updateProduct(@RequestBody ProductDTO productDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username, @PathVariable("id") Long id) {
-        productService.setProduct(productDTO, Long.parseLong(userIdx), username, id);
+        productService.updateProduct(productDTO, Long.parseLong(userIdx), username, id);
     }
 
     @DeleteMapping(value = "/delete/{id}")

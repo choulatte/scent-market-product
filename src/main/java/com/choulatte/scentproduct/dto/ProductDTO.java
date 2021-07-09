@@ -24,8 +24,8 @@ public class ProductDTO {
     private Date lastModifiedDatetime;
     private Date startingDatetime;
     private Date endingDatetime;
-    private Boolean isValid;
-    private Boolean isVisible;
+    private Boolean validity;
+    private Boolean visibility;
     private StatusType status;
     private List<InterestDTO> interests;
     private BrandDTO brand;
@@ -41,8 +41,8 @@ public class ProductDTO {
         this.lastModifiedDatetime = product.getLastModifiedDatetime();
         this.startingDatetime = product.getStartingDatetime();
         this.endingDatetime = product.getEndingDatetime();
-        this.isValid = product.getIsValid();
-        this.isVisible = product.getIsVisible();
+        this.validity = product.getValidity();
+        this.visibility = product.getVisibility();
         this.status = product.getStatus();
         this.brand = new BrandDTO(product.getBrand());
     }

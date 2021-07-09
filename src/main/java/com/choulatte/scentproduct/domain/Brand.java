@@ -1,5 +1,6 @@
 package com.choulatte.scentproduct.domain;
 
+import com.choulatte.scentproduct.dto.BrandDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,4 +28,8 @@ public class Brand {
 
     @OneToMany(mappedBy = "brand", fetch = FetchType.EAGER)
     private final List<Product> products = new ArrayList<>();
+
+    public static Brand newInstance(BrandDTO brandDTO) {
+        return Brand.builder().brandName(brandDTO.getBrandName()).build();
+    }
 }

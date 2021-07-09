@@ -6,8 +6,7 @@ import java.util.List;
 
 
 public interface BrandService {
-    void setBrand(BrandDTO brandDTO);
-    void updateBrand(BrandDTO brandDTO);
-    void deleteBrand(Long brandId);
+    BrandDTO createBrand(BrandDTO brandDTO);
+    BrandDTO updateBrand(BrandDTO brandDTO);
     List<BrandDTO> getBrands();
 }
