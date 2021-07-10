@@ -8,8 +8,6 @@ import java.util.Optional;
 
 public interface ProductService {
     List<ProductDTO> getUserProductsList(Long userId);
-    Optional<ProductDTO> getUserProductDetail(Long productId);
-
     List<ProductDTO> getProductsList();
     Optional<ProductDTO> getProductDetail(Long productId);
 

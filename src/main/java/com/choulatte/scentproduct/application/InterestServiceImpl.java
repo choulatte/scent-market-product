@@ -21,7 +21,7 @@ public class InterestServiceImpl implements InterestService {
 
     @Override
     public InterestDTO createInterest(InterestDTO interestDTO) {
-        return new InterestDTO(interestRepository.save(Interest.newInstance(interestDTO, getProduct(interestDTO.getProductId()))));
+        return interestRepository.save(interestDTO.toEntity(getProduct(interestDTO.getProductId()))).toDTO();
     }
 
     @Override
@@ -31,13 +31,13 @@ public class InterestServiceImpl implements InterestService {
 
     @Override
     public List<Long> getInterestedUser(Long productId) {
-        return null;
+        return interestRepository.findAllByProductProductId(productId);
     }
 
     @Override
     public List<ProductDTO> getUserInterestingProduct(Long userId) {
         return interestRepository.findAllByUserId(userId).stream().map(Interest::getProduct)
-                .collect(Collectors.toList()).stream().map(ProductDTO::new).collect(Collectors.toList());
+                .collect(Collectors.toList()).stream().map(Product::toDTO).collect(Collectors.toList());
     }
 
     private Product getProduct(Long productId) {

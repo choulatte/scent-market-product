@@ -18,16 +18,16 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public BrandDTO createBrand(BrandDTO brandDTO) {
-        return new BrandDTO(brandRepository.save(Brand.newInstance(brandDTO)));
+        return brandRepository.save(brandDTO.toEntity()).toDTO();
     }
 
     @Override
     public BrandDTO updateBrand(BrandDTO brandDTO) {
-        return new BrandDTO((brandRepository.save(Brand.newInstance(brandDTO))));
+        return brandRepository.save(brandDTO.toEntity()).toDTO();
     }
 
     @Override
     public List<BrandDTO> getBrands() {
-        return brandRepository.findAll().stream().map(BrandDTO::new).collect(Collectors.toList());
+        return brandRepository.findAll().stream().map(Brand::toDTO).collect(Collectors.toList());
     }
 }
