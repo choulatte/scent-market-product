@@ -45,7 +45,7 @@ public class ProductController {
 
     @GetMapping(value = "/update/{id}")
     ResponseEntity<ProductDTO> getUserProduct(@PathVariable("id") Long id) {
-        return productService.getUserProductDetail(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return productService.getProductDetail(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping(value = "/register")
@@ -59,7 +59,7 @@ public class ProductController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    void deleteProduct(@PathVariable("id") Long id) {
-        productService.deleteProduct(id);
+    void deleteProduct(@PathVariable("id") Long id, @RequestHeader("userId") String userId) {
+        productService.deleteProduct(id, Long.parseLong(userId));
     }
 }

@@ -9,6 +9,7 @@ import com.choulatte.scentproduct.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO createProduct(ProductDTO productDTO, Long userIdx, String username) {
-        return productRepository.save(productDTO.toEntity(getBrand(productDTO.getBrandId()))).toDTO();
+        return productRepository.save(productDTO.toEntity(getBrand(productDTO.getBrandId())).setRegisteredDatetime(new Date())).toDTO();
     }
 
     @Override
@@ -42,22 +43,27 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> getBrandProducts(Long brandId) {
-        return null;
+        return productRepository.findAllByBrandBrandId(brandId).stream().map(Product::toDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductDTO> getStatusProducts(StatusType status) {
-        return null;
+        return productRepository.findAllByStatus(status).stream().map(Product::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public ProductDTO updateProduct(ProductDTO productDTO, Long userIdx, String username, Long productId) {
-        return null;
+    public List<ProductDTO> getProductsBetweenDateTime(Date start, Date end) {
+        return productRepository.findAllByRegisteredDatetimeBetween(start, end).stream().map(Product::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public void deleteProduct(Long productId) {
+    public ProductDTO updateProduct(ProductDTO productDTO, Long userId, String username, Long productId) {
+        return productRepository.save(productDTO.toEntity(getBrand(productDTO.getBrandId()))).toDTO();
+    }
 
+    @Override
+    public void deleteProduct(Long productId, Long userId) {
+        productRepository.findByProductIdAndUserId(productId, userId).orElseThrow(NullPointerException::new).makeProductDelete(false, false);
     }
 
     private Product getProduct(Long productId) {

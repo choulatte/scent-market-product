@@ -72,6 +72,12 @@ public class Product {
     @JoinColumn(name = "brand")
     private Brand brand;
 
+
+    public Product setRegisteredDatetime(Date date) {
+        this.registeredDatetime = date;
+        return this;
+    }
+
     public void updateStatus(StatusType status){
         this.status = status;
         this.lastModifiedDatetime = new Date();
@@ -82,6 +88,11 @@ public class Product {
     }
 
     public void updateVisibility(Boolean visibility) {
+        this.visibility = visibility;
+    }
+
+    public void makeProductDelete(Boolean validity, Boolean visibility){
+        this.validity = validity;
         this.visibility = visibility;
     }
 
