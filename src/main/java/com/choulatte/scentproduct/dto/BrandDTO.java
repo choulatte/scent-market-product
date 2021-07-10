@@ -19,8 +19,8 @@ public class BrandDTO {
     private String brandName;
     private List<ProductDTO> products;
 
-    public BrandDTO(Brand brand) {
-        this.brandId = brand.getBrandId();
-        this.brandName = brand.getBrandName();
+    public Brand toEntity() {
+        return Brand.builder().brandId(this.getBrandId())
+                .brandName(this.brandName).build();
     }
 }

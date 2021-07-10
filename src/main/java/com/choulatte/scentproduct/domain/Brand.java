@@ -29,7 +29,8 @@ public class Brand {
     @OneToMany(mappedBy = "brand", fetch = FetchType.EAGER)
     private final List<Product> products = new ArrayList<>();
 
-    public static Brand newInstance(BrandDTO brandDTO) {
-        return Brand.builder().brandName(brandDTO.getBrandName()).build();
+    public BrandDTO toDTO() {
+        return BrandDTO.builder().brandId(this.brandId)
+                .brandName(this.brandName).build();
     }
 }

@@ -33,10 +33,10 @@ public class Interest {
     @Temporal(TemporalType.TIMESTAMP)
     private Date registeredDatetime;
 
-    public static Interest newInstance(InterestDTO interestDTO, Product product) {
-        return Interest.builder().userId(interestDTO.getUserId())
-                .product(product)
-                .registeredDatetime(new Date())
-                .build();
+    public InterestDTO toDTO() {
+        return InterestDTO.builder().interestId(this.interestId)
+                .userId(this.userId)
+                .productId(this.product.getProductId())
+                .registeredDatetime(this.registeredDatetime).build();
     }
 }

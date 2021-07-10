@@ -1,5 +1,6 @@
 package com.choulatte.scentproduct.dto;
 
+import com.choulatte.scentproduct.domain.Brand;
 import com.choulatte.scentproduct.domain.Interest;
 import com.choulatte.scentproduct.domain.Product;
 import com.choulatte.scentproduct.domain.StatusType;
@@ -27,23 +28,21 @@ public class ProductDTO {
     private Boolean validity;
     private Boolean visibility;
     private StatusType status;
-    private List<InterestDTO> interests;
-    private BrandDTO brand;
+    private List<Long> interests;
+    private Long brandId;
 
-    public ProductDTO(Product product) {
-        this.productId = product.getProductId();
-        this.productName = product.getProductName();
-        this.productDetail = product.getProductDetail();
-        this.userId = product.getUserId();
-        this.username = product.getUsername();
-        this.startingPrice = product.getStartingPrice();
-        this.registerDatetime = product.getRegisteredDatetime();
-        this.lastModifiedDatetime = product.getLastModifiedDatetime();
-        this.startingDatetime = product.getStartingDatetime();
-        this.endingDatetime = product.getEndingDatetime();
-        this.validity = product.getValidity();
-        this.visibility = product.getVisibility();
-        this.status = product.getStatus();
-        this.brand = new BrandDTO(product.getBrand());
+    public Product toEntity(Brand brand) {
+        return Product.builder().productId(this.productId)
+                .productName(this.productName)
+                .productDetail(this.productDetail)
+                .userId(this.userId).username(this.username)
+                .startingPrice(this.startingPrice)
+                .startingDatetime(this.startingDatetime)
+                .endingDatetime(this.endingDatetime)
+                .registeredDatetime(this.registerDatetime)
+                .lastModifiedDatetime(new Date())
+                .validity(this.validity).visibility(this.visibility)
+                .status(this.status)
+                .brand(brand).build();
     }
 }

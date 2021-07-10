@@ -85,19 +85,18 @@ public class Product {
         this.visibility = visibility;
     }
 
-    public static Product newInstance(ProductDTO productDTO) {
-        return Product.builder().productName(productDTO.getProductName())
-                .productDetail(productDTO.getProductDetail())
-                .userId(productDTO.getUserId())
-                .username(productDTO.getUsername())
-                .startingPrice(productDTO.getStartingPrice())
-                .registeredDatetime(productDTO.getRegisterDatetime())
-                .startingDatetime(productDTO.getStartingDatetime())
-                .endingDatetime(productDTO.getEndingDatetime())
-                .lastModifiedDatetime(new Date())
-                .validity(true)
-                .visibility(true)
-                .status(StatusType.REGISTERED)
-                .brand(Brand.newInstance(productDTO.getBrand())).build();
+    public ProductDTO toDTO() {
+        return ProductDTO.builder().productId(this.productId)
+                .productName(this.productName)
+                .productDetail(this.productDetail)
+                .userId(this.userId).username(this.username)
+                .startingPrice(this.startingPrice)
+                .startingDatetime(this.startingDatetime)
+                .endingDatetime(this.endingDatetime)
+                .registerDatetime(this.endingDatetime)
+                .lastModifiedDatetime(this.lastModifiedDatetime)
+                .validity(this.validity).visibility(this.visibility)
+                .status(this.status)
+                .brandId(this.brand.getBrandId()).build();
     }
 }

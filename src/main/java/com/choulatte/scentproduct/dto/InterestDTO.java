@@ -1,6 +1,7 @@
 package com.choulatte.scentproduct.dto;
 
 import com.choulatte.scentproduct.domain.Interest;
+import com.choulatte.scentproduct.domain.Product;
 import lombok.*;
 
 import java.util.Date;
@@ -15,10 +16,10 @@ public class InterestDTO {
     private Long productId;
     private Date registeredDatetime;
 
-    public InterestDTO(Interest interest) {
-        this.interestId = interest.getInterestId();
-        this.userId = interest.getUserId();
-        this.productId = interest.getProduct().getProductId();
-        this.registeredDatetime = interest.getRegisteredDatetime();
+    public Interest toEntity(Product product) {
+        return Interest.builder().interestId(this.interestId)
+                .userId(this.userId)
+                .product(product)
+                .registeredDatetime(new Date()).build();
     }
 }
