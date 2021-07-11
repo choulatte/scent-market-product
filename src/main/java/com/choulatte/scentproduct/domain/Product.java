@@ -72,6 +72,9 @@ public class Product {
     @JoinColumn(name = "brand")
     private Brand brand;
 
+    @OneToMany(mappedBy = "image", fetch = FetchType.EAGER)
+    private final List<Image> images = new ArrayList<>();
+
 
     public Product setRegisteredDatetime(Date date) {
         this.registeredDatetime = date;

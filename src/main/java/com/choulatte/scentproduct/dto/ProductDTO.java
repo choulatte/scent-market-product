@@ -28,7 +28,6 @@ public class ProductDTO {
     private Boolean validity;
     private Boolean visibility;
     private StatusType status;
-    private List<Long> interests;
     private Long brandId;
 
     public Product toEntity(Brand brand) {

@@ -13,10 +13,10 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findAll();
-    List<Product> findAllByUserId(Long userId);
-    List<Product> findAllByBrandBrandId(Long brandId);
-    List<Product> findAllByStatus(StatusType status);
-    Optional<Product> findByProductIdAndUserId(Long productId, Long userId);
-    List<Product> findAllByRegisteredDatetimeBetween(Date start, Date end);
+    List<Product> findAllByVisibilityIsTrue();
+    List<Product> findAllByUserIdAndVisibilityTrue(Long userId);
+    List<Product> findAllByBrandBrandIdAndVisibilityTrue(Long brandId);
+    List<Product> findAllByStatusAndVisibilityTrue(StatusType status);
+    Optional<Product> findByProductIdAndUserIdAndVisibilityTrue(Long productId, Long userId);
+    List<Product> findAllByRegisteredDatetimeBetweenAndVisibilityTrue(Date start, Date end);
 }

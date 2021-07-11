@@ -4,6 +4,7 @@ import com.choulatte.scentproduct.domain.Brand;
 import com.choulatte.scentproduct.domain.Product;
 import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.dto.ProductDTO;
+import com.choulatte.scentproduct.dto.RequestDateDTO;
 import com.choulatte.scentproduct.repository.BrandRepository;
 import com.choulatte.scentproduct.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,12 +29,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> getUserProductsList(Long userId) {
-        return productRepository.findAllByUserId(userId).stream().map(Product::toDTO).collect(Collectors.toList());
+        return productRepository.findAllByUserIdAndVisibilityTrue(userId).stream().map(Product::toDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductDTO> getProductsList() {
-        return productRepository.findAll().stream().map(Product::toDTO).collect(Collectors.toList());
+        return productRepository.findAllByVisibilityIsTrue().stream().map(Product::toDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -43,17 +44,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> getBrandProducts(Long brandId) {
-        return productRepository.findAllByBrandBrandId(brandId).stream().map(Product::toDTO).collect(Collectors.toList());
+        return productRepository.findAllByBrandBrandIdAndVisibilityTrue(brandId).stream().map(Product::toDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductDTO> getStatusProducts(StatusType status) {
-        return productRepository.findAllByStatus(status).stream().map(Product::toDTO).collect(Collectors.toList());
+        return productRepository.findAllByStatusAndVisibilityTrue(status).stream().map(Product::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<ProductDTO> getProductsBetweenDateTime(Date start, Date end) {
-        return productRepository.findAllByRegisteredDatetimeBetween(start, end).stream().map(Product::toDTO).collect(Collectors.toList());
+    public List<ProductDTO> getProductsBetweenDatetime(RequestDateDTO req) {
+        return productRepository.findAllByRegisteredDatetimeBetweenAndVisibilityTrue(req.getStartDate(), req.getEndDate()).stream().map(Product::toDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -63,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long productId, Long userId) {
-        productRepository.findByProductIdAndUserId(productId, userId).orElseThrow(NullPointerException::new).makeProductDelete(false, false);
+        productRepository.findByProductIdAndUserIdAndVisibilityTrue(productId, userId).orElseThrow(NullPointerException::new).makeProductDelete(false, false);
     }
 
     private Product getProduct(Long productId) {
