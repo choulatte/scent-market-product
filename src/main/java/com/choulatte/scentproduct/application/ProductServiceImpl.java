@@ -4,7 +4,6 @@ import com.choulatte.scentproduct.domain.Brand;
 import com.choulatte.scentproduct.domain.Product;
 import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.dto.ProductDTO;
-import com.choulatte.scentproduct.dto.RequestDateDTO;
 import com.choulatte.scentproduct.repository.BrandRepository;
 import com.choulatte.scentproduct.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,8 +52,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getProductsBetweenDatetime(RequestDateDTO req) {
-        return productRepository.findAllByRegisteredDatetimeBetweenAndVisibilityTrue(req.getStartDate(), req.getEndDate()).stream().map(Product::toDTO).collect(Collectors.toList());
+    public List<ProductDTO> getProductsBetweenDatetime(Date start, Date end) {
+        return productRepository.findAllByRegisteredDatetimeBetweenAndVisibilityTrue(start, end).stream().map(Product::toDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -67,9 +66,6 @@ public class ProductServiceImpl implements ProductService {
         productRepository.findByProductIdAndUserIdAndVisibilityTrue(productId, userId).orElseThrow(NullPointerException::new).makeProductDelete(false, false);
     }
 
-    private Product getProduct(Long productId) {
-        return productRepository.findById(productId).orElseThrow(NullPointerException::new);
-    }
     private Brand getBrand(Long brandId) {
         return brandRepository.findById(brandId).orElseThrow(NullPointerException::new);
     }

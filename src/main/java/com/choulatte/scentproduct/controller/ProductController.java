@@ -3,13 +3,13 @@ package com.choulatte.scentproduct.controller;
 import com.choulatte.scentproduct.application.ProductService;
 import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.dto.ProductDTO;
-import com.choulatte.scentproduct.dto.RequestDateDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -65,8 +65,8 @@ public class ProductController {
     }
 
     @GetMapping(value = "")
-    ResponseEntity<List<ProductDTO>> getProductsBetweenDatetime(@RequestBody RequestDateDTO requestDateDTO) {
-        return ResponseEntity.ok(productService.getProductsBetweenDatetime(requestDateDTO));
+    ResponseEntity<List<ProductDTO>> getProductsBetweenDatetime(@RequestParam("start") @DateTimeFormat(pattern = "yyyyMMdd")Date start, @RequestParam("end") @DateTimeFormat(pattern = "yyyyMMdd")Date end) {
+        return ResponseEntity.ok(productService.getProductsBetweenDatetime(start, end));
     }
 
 }
