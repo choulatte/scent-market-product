@@ -3,7 +3,9 @@ package com.choulatte.scentproduct.controller;
 import com.choulatte.scentproduct.application.ProductService;
 import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.dto.ProductDTO;
+import com.choulatte.scentproduct.dto.ProductPageDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,23 +36,23 @@ public class ProductController {
     }
 
     @GetMapping(value = "")
-    ResponseEntity<List<ProductDTO>> getProducts() {
-        return ResponseEntity.ok(productService.getProductsList());
+    ResponseEntity<ProductPageDTO> getProducts(Pageable pageable) {
+        return ResponseEntity.ok(productService.getProductPage(pageable));
     }
 
     @GetMapping(value = "/myitems")
-    ResponseEntity<List<ProductDTO>> getUserProducts(@RequestHeader("userId") String userId) {
-        return ResponseEntity.ok(productService.getUserProductsList(Long.parseLong(userId)));
+    public ResponseEntity<ProductPageDTO> getUserProducts(@RequestHeader("userId") String userId, Pageable pageable) {
+        return ResponseEntity.ok(productService.getUserProductPage(Long.parseLong(userId), pageable));
     }
 
     @GetMapping(value = "/{brand}")
-    ResponseEntity<List<ProductDTO>> getBrandProducts(@PathVariable("brand") Long brandId) {
-        return ResponseEntity.ok(productService.getBrandProducts(brandId));
+    ResponseEntity<ProductPageDTO> getBrandProducts(@PathVariable("brand") Long brandId, Pageable pageable) {
+        return ResponseEntity.ok(productService.getBrandProductPage(brandId, pageable));
     }
 
     @GetMapping(value = "/{status}")
-    ResponseEntity<List<ProductDTO>> getBrandProducts(@PathVariable("status") String status) {
-        return ResponseEntity.ok(productService.getStatusProducts(StatusType.valueOf(status)));
+    ResponseEntity<ProductPageDTO> getBrandProducts(@PathVariable("status") String status, Pageable pageable) {
+        return ResponseEntity.ok(productService.getStatusProductPage(StatusType.valueOf(status), pageable));
     }
 
     @GetMapping(value = "/{id}")
@@ -65,8 +67,9 @@ public class ProductController {
     }
 
     @GetMapping(value = "")
-    ResponseEntity<List<ProductDTO>> getProductsBetweenDatetime(@RequestParam("start") @DateTimeFormat(pattern = "yyyyMMdd")Date start, @RequestParam("end") @DateTimeFormat(pattern = "yyyyMMdd")Date end) {
-        return ResponseEntity.ok(productService.getProductsBetweenDatetime(start, end));
+    ResponseEntity<ProductPageDTO> getProductsBetweenDatetime
+            (@RequestParam("start") @DateTimeFormat(pattern = "yyyyMMdd")Date start, @RequestParam("end") @DateTimeFormat(pattern = "yyyyMMdd")Date end, Pageable pageable) {
+        return ResponseEntity.ok(productService.getProductsBetweenDatetimePage(start, end, pageable));
     }
 
 }

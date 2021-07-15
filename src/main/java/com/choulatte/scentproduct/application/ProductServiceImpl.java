@@ -4,9 +4,12 @@ import com.choulatte.scentproduct.domain.Brand;
 import com.choulatte.scentproduct.domain.Product;
 import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.dto.ProductDTO;
+import com.choulatte.scentproduct.dto.ProductPageDTO;
 import com.choulatte.scentproduct.repository.BrandRepository;
 import com.choulatte.scentproduct.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -27,13 +30,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getUserProductsList(Long userId) {
-        return productRepository.findAllByUserIdAndVisibilityTrue(userId).stream().map(Product::toDTO).collect(Collectors.toList());
+    public ProductPageDTO getUserProductPage(Long userId, Pageable pageable) {
+
+        return getProductsPageDTO(productRepository.findAllByUserIdAndVisibilityTrue(userId, pageable), pageable);
     }
 
     @Override
-    public List<ProductDTO> getProductsList() {
-        return productRepository.findAllByVisibilityIsTrue().stream().map(Product::toDTO).collect(Collectors.toList());
+    public ProductPageDTO getProductPage(Pageable pageable) {
+        return getProductsPageDTO(productRepository.findAllByVisibilityIsTrue(pageable), pageable);
     }
 
     @Override
@@ -42,18 +46,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getBrandProducts(Long brandId) {
-        return productRepository.findAllByBrandBrandIdAndVisibilityTrue(brandId).stream().map(Product::toDTO).collect(Collectors.toList());
+    public ProductPageDTO getBrandProductPage(Long brandId, Pageable pageable) {
+        return getProductsPageDTO(productRepository.findAllByBrandBrandIdAndVisibilityTrue(brandId, pageable), pageable);
     }
 
     @Override
-    public List<ProductDTO> getStatusProducts(StatusType status) {
-        return productRepository.findAllByStatusAndVisibilityTrue(status).stream().map(Product::toDTO).collect(Collectors.toList());
+    public ProductPageDTO getStatusProductPage(StatusType status, Pageable pageable) {
+        return getProductsPageDTO(productRepository.findAllByStatusAndVisibilityTrue(status, pageable), pageable);
     }
 
     @Override
-    public List<ProductDTO> getProductsBetweenDatetime(Date start, Date end) {
-        return productRepository.findAllByRegisteredDatetimeBetweenAndVisibilityTrue(start, end).stream().map(Product::toDTO).collect(Collectors.toList());
+    public ProductPageDTO getProductsBetweenDatetimePage(Date start, Date end, Pageable pageable) {
+        return getProductsPageDTO(productRepository.findAllByRegisteredDatetimeBetweenAndVisibilityTrue(start, end, pageable), pageable);
     }
 
     @Override
@@ -64,6 +68,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long productId, Long userId) {
         productRepository.findByProductIdAndUserIdAndVisibilityTrue(productId, userId).orElseThrow(NullPointerException::new).makeProductDelete(false, false);
+    }
+
+    private ProductPageDTO getProductsPageDTO(Page<Product> products, Pageable pageable) {
+        List<ProductDTO> productDTOs = products.getContent().stream().map(Product::toDTO).collect(Collectors.toList());
+
+        return ProductPageDTO.builder()
+                .totalPage(products.getTotalPages())
+                .currentPage(pageable.getPageNumber())
+                .products(productDTOs).build();
     }
 
     private Brand getBrand(Long brandId) {
