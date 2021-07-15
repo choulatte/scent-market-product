@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +34,7 @@ public class ProductController {
         productService.deleteProduct(id, Long.parseLong(userId));
     }
 
-    @GetMapping(value = "")
+    @GetMapping(value = "/all")
     ResponseEntity<ProductPageDTO> getProducts(Pageable pageable) {
         return ResponseEntity.ok(productService.getProductPage(pageable));
     }

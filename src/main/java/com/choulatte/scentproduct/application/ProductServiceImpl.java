@@ -5,6 +5,7 @@ import com.choulatte.scentproduct.domain.Product;
 import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductPageDTO;
+import com.choulatte.scentproduct.exception.BrandNotFoundException;
 import com.choulatte.scentproduct.repository.BrandRepository;
 import com.choulatte.scentproduct.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long productId, Long userId) {
-        productRepository.findByProductIdAndUserIdAndVisibilityTrue(productId, userId).orElseThrow(NullPointerException::new).makeProductDelete(false, false);
+        productRepository.findByProductIdAndUserIdAndVisibilityTrue(productId, userId).orElseThrow(RuntimeException::new).makeProductDelete(false, false);
     }
 
     private ProductPageDTO getProductsPageDTO(Page<Product> products, Pageable pageable) {
@@ -80,6 +81,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Brand getBrand(Long brandId) {
-        return brandRepository.findById(brandId).orElseThrow(NullPointerException::new);
+        return brandRepository.findById(brandId).orElseThrow(BrandNotFoundException::new);
     }
 }

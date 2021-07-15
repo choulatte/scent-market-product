@@ -6,7 +6,6 @@ import com.choulatte.scentproduct.dto.ProductPageDTO;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {

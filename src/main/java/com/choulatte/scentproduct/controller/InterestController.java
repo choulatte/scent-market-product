@@ -2,7 +2,6 @@ package com.choulatte.scentproduct.controller;
 
 import com.choulatte.scentproduct.application.InterestService;
 import com.choulatte.scentproduct.application.ProductService;
-import com.choulatte.scentproduct.domain.Interest;
 import com.choulatte.scentproduct.dto.InterestDTO;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import lombok.RequiredArgsConstructor;

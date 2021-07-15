@@ -1,14 +1,11 @@
 package com.choulatte.scentproduct.dto;
 
 import com.choulatte.scentproduct.domain.Brand;
-import com.choulatte.scentproduct.domain.Interest;
 import com.choulatte.scentproduct.domain.Product;
 import com.choulatte.scentproduct.domain.StatusType;
 import lombok.*;
 
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
