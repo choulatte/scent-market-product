@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ProductService {
     ProductPageDTO getUserProductPage(Long userId, Pageable pageable);
     ProductPageDTO getProductPage(Pageable pageable);
-    Optional<ProductDTO> getProductDetail(Long productId);
+    ProductDTO getProductDetail(Long productId);
 
     ProductPageDTO getBrandProductPage(Long brandId, Pageable pageable);
     ProductPageDTO getStatusProductPage(StatusType status, Pageable pageable);

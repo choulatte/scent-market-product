@@ -20,13 +20,13 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping(value = "/register")
-    void setProduct(@RequestBody ProductDTO productDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username) {
-        productService.createProduct(productDTO, Long.parseLong(userIdx), username);
+    ProductDTO setProduct(@RequestBody ProductDTO productDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username) {
+        return productService.createProduct(productDTO, Long.parseLong(userIdx), username);
     }
 
     @PutMapping(value = "/update/{id}")
-    void updateProduct(@RequestBody ProductDTO productDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username, @PathVariable("id") Long id) {
-        productService.updateProduct(productDTO, Long.parseLong(userIdx), username, id);
+    ProductDTO updateProduct(@RequestBody ProductDTO productDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username, @PathVariable("id") Long id) {
+        return productService.updateProduct(productDTO, Long.parseLong(userIdx), username, id);
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -56,13 +56,13 @@ public class ProductController {
 
     @GetMapping(value = "/{id}")
     ResponseEntity<ProductDTO> getProduct(@PathVariable("id") Long id) {
-        return productService.getProductDetail(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(productService.getProductDetail(id));
 
     }
 
     @GetMapping(value = "/update/{id}")
     ResponseEntity<ProductDTO> getUserProduct(@PathVariable("id") Long id) {
-        return productService.getProductDetail(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(productService.getProductDetail(id));
     }
 
     @GetMapping(value = "")

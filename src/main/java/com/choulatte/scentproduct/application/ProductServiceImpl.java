@@ -6,6 +6,7 @@ import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductPageDTO;
 import com.choulatte.scentproduct.exception.BrandNotFoundException;
+import com.choulatte.scentproduct.exception.ProductNotFoundException;
 import com.choulatte.scentproduct.repository.BrandRepository;
 import com.choulatte.scentproduct.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +43,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<ProductDTO> getProductDetail(Long productId) {
-        return productRepository.findById(productId).map(Product::toDTO);
+    public ProductDTO getProductDetail(Long productId) {
+        return productRepository.findById(productId).map(Product::toDTO).orElseThrow(ProductNotFoundException::new);
     }
 
     @Override
