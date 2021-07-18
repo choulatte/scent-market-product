@@ -20,13 +20,13 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping(value = "/register")
-    ProductDTO setProduct(@RequestBody ProductDTO productDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username) {
-        return productService.createProduct(productDTO, Long.parseLong(userIdx), username);
+    ResponseEntity<ProductDTO> setProduct(@RequestBody ProductDTO productDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username) {
+        return ResponseEntity.ok(productService.createProduct(productDTO, Long.parseLong(userIdx), username));
     }
 
     @PutMapping(value = "/update/{id}")
-    ProductDTO updateProduct(@RequestBody ProductDTO productDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username, @PathVariable("id") Long id) {
-        return productService.updateProduct(productDTO, Long.parseLong(userIdx), username, id);
+    ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username, @PathVariable("id") Long id) {
+        return ResponseEntity.ok(productService.updateProduct(productDTO, Long.parseLong(userIdx), username, id));
     }
 
     @DeleteMapping(value = "/delete/{id}")
