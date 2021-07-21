@@ -78,22 +78,29 @@ public class Product {
         return this;
     }
 
-    public void updateStatus(StatusType status){
+    public Product updateStatus(StatusType status){
         this.status = status;
         this.lastModifiedDatetime = new Date();
+        return this;
     }
 
-    public void updateValidity(Boolean validity) {
+    public Product updateValidity(Boolean validity) {
         this.validity = validity;
+        return this;
     }
 
-    public void updateVisibility(Boolean visibility) {
+    public Product updateVisibility(Boolean visibility) {
         this.visibility = visibility;
+        return this;
     }
 
     public void makeProductDelete(Boolean validity, Boolean visibility){
         this.validity = validity;
         this.visibility = visibility;
+    }
+
+    public Boolean userIdIsEqual(Long userId) {
+        return this.userId.equals(userId);
     }
 
     public ProductDTO toDTO() {

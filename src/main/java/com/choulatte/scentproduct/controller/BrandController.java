@@ -19,13 +19,13 @@ public class BrandController {
     ResponseEntity<List<BrandDTO>> getBrandList() { return ResponseEntity.ok(brandService.getBrands()); }
 
     @PostMapping(value = "")
-    void setBrand(BrandDTO brandDTO) {
-        brandService.createBrand(brandDTO);
+    ResponseEntity<BrandDTO> setBrand(BrandDTO brandDTO) {
+        return ResponseEntity.ok(brandService.createBrand(brandDTO));
     }
 
     @PutMapping(value = "")
-    void updateBrand(BrandDTO brandDTO) {
-        brandService.updateBrand(brandDTO);
+    ResponseEntity<BrandDTO> updateBrand(BrandDTO brandDTO) {
+        return ResponseEntity.ok(brandService.updateBrand(brandDTO));
     }
 
 }

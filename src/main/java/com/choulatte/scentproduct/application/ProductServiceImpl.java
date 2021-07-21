@@ -7,6 +7,7 @@ import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductPageDTO;
 import com.choulatte.scentproduct.exception.BrandNotFoundException;
 import com.choulatte.scentproduct.exception.ProductNotFoundException;
+import com.choulatte.scentproduct.exception.UserNotValidException;
 import com.choulatte.scentproduct.repository.BrandRepository;
 import com.choulatte.scentproduct.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,6 +72,14 @@ public class ProductServiceImpl implements ProductService {
         productRepository.findByProductIdAndUserIdAndVisibilityTrue(productId, userId).orElseThrow(RuntimeException::new).makeProductDelete(false, false);
     }
 
+    @Override
+    public ProductDTO cancelProductBidding(Long productId, Long userId) {
+        Product product = getProduct(productId);
+        if(product.userIdIsEqual(userId))
+            return productRepository.save(product.updateStatus(StatusType.CANCELLED).updateValidity(false)).toDTO();
+        else throw new UserNotValidException();
+    }
+
     private ProductPageDTO getProductsPageDTO(Page<Product> products, Pageable pageable) {
         List<ProductDTO> productDTOs = products.getContent().stream().map(Product::toDTO).collect(Collectors.toList());
 
@@ -83,5 +91,9 @@ public class ProductServiceImpl implements ProductService {
 
     private Brand getBrand(Long brandId) {
         return brandRepository.findById(brandId).orElseThrow(BrandNotFoundException::new);
+    }
+
+    private Product getProduct(Long productId) {
+        return productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
     }
 }

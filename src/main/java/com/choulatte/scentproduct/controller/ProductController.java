@@ -71,4 +71,9 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductsBetweenDatetimePage(start, end, pageable));
     }
 
+    @PostMapping(value = "/cancel")
+    ResponseEntity<ProductDTO> cancelProductBidding(@RequestParam("productId") Long productId, @RequestHeader("userId") String userId) {
+        return ResponseEntity.ok(productService.cancelProductBidding(productId, Long.parseLong(userId)));
+    }
+
 }
