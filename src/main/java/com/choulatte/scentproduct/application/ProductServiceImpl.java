@@ -96,4 +96,20 @@ public class ProductServiceImpl implements ProductService {
     private Product getProduct(Long productId) {
         return productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
     }
+
+    private List<Product> getUserProducts(Long userId) {
+        return productRepository.findAllByUserId(userId);
+    }
+
+    private List<Long> updateUserProductsStatus(Long userId, StatusType status) {
+        List<Product> list = productRepository.saveAll(getUserProducts(userId).stream().map(product -> product.updateStatus(status)).collect(Collectors.toList()));
+        return list.stream().map(Product::getProductId).collect(Collectors.toList());
+    }
+
+    /*
+    private Boolean verifyUserIsNotPending(Long userId) {
+
+    }
+
+     */
 }
