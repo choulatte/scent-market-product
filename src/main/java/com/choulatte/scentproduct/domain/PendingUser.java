@@ -22,6 +22,6 @@ public class PendingUser {
     @Column(nullable = false, name = "user_idx")
     private Long userId;
 
-    @Column(name = "user_invalidation")
-    private Boolean userInvalidation;
+    @Column(name = "user_validation")
+    private Boolean userValidation;
 }

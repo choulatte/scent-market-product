@@ -6,9 +6,11 @@ import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductPageDTO;
 import com.choulatte.scentproduct.exception.BrandNotFoundException;
+import com.choulatte.scentproduct.exception.PendingUserException;
 import com.choulatte.scentproduct.exception.ProductNotFoundException;
 import com.choulatte.scentproduct.exception.UserNotValidException;
 import com.choulatte.scentproduct.repository.BrandRepository;
+import com.choulatte.scentproduct.repository.PendingUserRepository;
 import com.choulatte.scentproduct.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,15 +27,17 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final BrandRepository brandRepository;
+    private final PendingUserRepository pendingUserRepository;
 
     @Override
-    public ProductDTO createProduct(ProductDTO productDTO, Long userIdx, String username) {
+    public ProductDTO createProduct(ProductDTO productDTO, Long userId, String username) {
+        if(verifyUserIsPending(userId)) throw new PendingUserException();
         return productRepository.save(productDTO.toEntity(getBrand(productDTO.getBrandId())).setRegisteredDatetime(new Date())).toDTO();
     }
 
     @Override
     public ProductPageDTO getUserProductPage(Long userId, Pageable pageable) {
-
+        if(verifyUserIsPending(userId)) throw new PendingUserException();
         return getProductsPageDTO(productRepository.findAllByUserIdAndVisibilityTrue(userId, pageable), pageable);
     }
 
@@ -106,10 +110,9 @@ public class ProductServiceImpl implements ProductService {
         return list.stream().map(Product::getProductId).collect(Collectors.toList());
     }
 
-    /*
-    private Boolean verifyUserIsNotPending(Long userId) {
 
+    private Boolean verifyUserIsPending(Long userId) {
+        return pendingUserRepository.findByUserId(userId).isPresent();
     }
 
-     */
 }
