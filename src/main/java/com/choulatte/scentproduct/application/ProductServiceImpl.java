@@ -5,10 +5,7 @@ import com.choulatte.scentproduct.domain.Product;
 import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductPageDTO;
-import com.choulatte.scentproduct.exception.BrandNotFoundException;
-import com.choulatte.scentproduct.exception.PendingUserException;
-import com.choulatte.scentproduct.exception.ProductNotFoundException;
-import com.choulatte.scentproduct.exception.UserNotValidException;
+import com.choulatte.scentproduct.exception.*;
 import com.choulatte.scentproduct.repository.BrandRepository;
 import com.choulatte.scentproduct.repository.PendingUserRepository;
 import com.choulatte.scentproduct.repository.ProductRepository;
@@ -73,7 +70,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long productId, Long userId) {
-        productRepository.findByProductIdAndUserIdAndVisibilityTrue(productId, userId).orElseThrow(RuntimeException::new).makeProductDelete(false, false);
+        productRepository.save(
+                productRepository.findByProductIdAndUserIdAndVisibilityTrue(productId, userId).orElseThrow(RuntimeException::new).makeProductDelete()
+        );
     }
 
     @Override
@@ -105,14 +104,30 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAllByUserId(userId);
     }
 
-    private List<Long> updateUserProductsStatus(Long userId, StatusType status) {
+    public List<Long> updateUserProductsStatus(Long userId, StatusType status) {
         List<Product> list = productRepository.saveAll(getUserProducts(userId).stream().map(product -> product.updateStatus(status)).collect(Collectors.toList()));
         return list.stream().map(Product::getProductId).collect(Collectors.toList());
+    }
+
+    @Override
+    public void makeProductsInvalid(Long userId) {
+        List<Product> userProducts = getUserProducts(userId);
+        List<Product> pendingProducts = productRepository.findAllByUserIdAndStatus(userId, StatusType.PENDING);
+        if(userProducts.size() != pendingProducts.size()) throw new ProductInvalidatingException();
+
+        productRepository.saveAll(userProducts.stream().map(Product::makeProductDelete).collect(Collectors.toList()));
     }
 
 
     private Boolean verifyUserIsPending(Long userId) {
         return pendingUserRepository.findByUserId(userId).isPresent();
+    }
+
+    public Boolean checkUserProductOngoing(Long userId) {
+        if(productRepository.countProductByUserIdAndStatus(userId, StatusType.ONGOING).equals(0L)) {
+            return true;
+        }
+        else throw new OngoingProductPresentException();
     }
 
 }

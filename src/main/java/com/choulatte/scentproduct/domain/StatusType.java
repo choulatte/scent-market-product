@@ -7,5 +7,6 @@ public enum StatusType {
     CONTRACTED,
     CANCELLED,
     CLOSED,
-    PENDING
+    PENDING,
+    DELETED
 }

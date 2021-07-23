@@ -94,9 +94,11 @@ public class Product {
         return this;
     }
 
-    public void makeProductDelete(Boolean validity, Boolean visibility){
-        this.validity = validity;
-        this.visibility = visibility;
+    public Product makeProductDelete(){
+        this.validity = false;
+        this.visibility = false;
+        this.status = StatusType.DELETED;
+        return this;
     }
 
     public Boolean userIdIsEqual(Long userId) {

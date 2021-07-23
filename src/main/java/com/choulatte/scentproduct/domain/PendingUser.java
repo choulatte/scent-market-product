@@ -24,4 +24,9 @@ public class PendingUser {
 
     @Column(name = "user_validation")
     private Boolean userValidation;
+
+    public PendingUser makeUserInvalid() {
+        this.userValidation = false;
+        return this;
+    }
 }

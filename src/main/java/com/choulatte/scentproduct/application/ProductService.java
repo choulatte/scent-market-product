@@ -6,6 +6,7 @@ import com.choulatte.scentproduct.dto.ProductPageDTO;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
+import java.util.List;
 
 public interface ProductService {
     ProductPageDTO getUserProductPage(Long userId, Pageable pageable);
@@ -22,4 +23,8 @@ public interface ProductService {
     void deleteProduct(Long productId, Long userId);
 
     ProductDTO cancelProductBidding(Long productId, Long userId);
+    List<Long> updateUserProductsStatus(Long userId, StatusType status);
+    void makeProductsInvalid(Long userId);
+    Boolean checkUserProductOngoing(Long userId);
+
 }

@@ -15,8 +15,13 @@ public class PendingServiceImpl implements PendingService {
     private final PendingUserRepository pendingUserRepository;
 
     @Override
-    public Long makeUserPending(Long userID) throws PendingIllegalStateException {
-        return pendingUserRepository.save(new PendingUserDTO(userID, true).toEntity()).getUserId();
+    public void makeUserPending(Long userID) throws PendingIllegalStateException {
+        pendingUserRepository.save(new PendingUserDTO(userID, true).toEntity());
+    }
+
+    @Override
+    public void makeUserInvalid(Long userId) {
+        pendingUserRepository.save(getPendingUser(userId).makeUserInvalid());
     }
 
     @Override

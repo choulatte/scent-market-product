@@ -1,9 +1,8 @@
 package com.choulatte.scentproduct.application;
 
-import java.util.List;
-
 public interface PendingService {
 
-    Long makeUserPending(Long userID);
+    void makeUserPending(Long userID);
+    void makeUserInvalid(Long userId);
     void clearPending(Long userId);
 }
