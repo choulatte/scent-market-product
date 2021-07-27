@@ -1,6 +1,7 @@
 package com.choulatte.scentproduct.domain;
 
 import com.choulatte.scentproduct.dto.ProductDTO;
+import com.choulatte.scentproduct.exception.ProductBadRequestException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -78,6 +79,7 @@ public class Product {
         return this;
     }
 
+    // TODO("Refactor Domain Methods")
     public Product updateStatus(StatusType status){
         this.status = status;
         this.lastModifiedDatetime = new Date();
@@ -94,7 +96,9 @@ public class Product {
         return this;
     }
 
-    public Product makeProductDelete(){
+    public Product makeProductDelete(Long productId, Long userId){
+        if(!this.userId.equals(userId) || !this.productId.equals(productId)) throw new ProductBadRequestException();
+
         this.validity = false;
         this.visibility = false;
         this.status = StatusType.DELETED;

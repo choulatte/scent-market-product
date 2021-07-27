@@ -71,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long productId, Long userId) {
         productRepository.save(
-                productRepository.findByProductIdAndUserIdAndVisibilityTrue(productId, userId).orElseThrow(RuntimeException::new).makeProductDelete()
+                productRepository.findByProductIdAndUserIdAndVisibilityTrue(productId, userId).orElseThrow(RuntimeException::new).makeProductDelete(productId, userId)
         );
     }
 
@@ -115,7 +115,7 @@ public class ProductServiceImpl implements ProductService {
         List<Product> pendingProducts = productRepository.findAllByUserIdAndStatus(userId, StatusType.PENDING);
         if(userProducts.size() != pendingProducts.size()) throw new ProductInvalidatingException();
 
-        productRepository.saveAll(userProducts.stream().map(Product::makeProductDelete).collect(Collectors.toList()));
+        productRepository.saveAll(userProducts.stream().map(product -> product.makeProductDelete(product.getProductId(), userId)).collect(Collectors.toList()));
     }
 
 
