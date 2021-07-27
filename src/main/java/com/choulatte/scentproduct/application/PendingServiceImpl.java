@@ -2,7 +2,6 @@ package com.choulatte.scentproduct.application;
 
 import com.choulatte.scentproduct.domain.PendingUser;
 import com.choulatte.scentproduct.dto.PendingUserDTO;
-import com.choulatte.scentproduct.exception.PendingIllegalStateException;
 import com.choulatte.scentproduct.exception.PendingUserException;
 import com.choulatte.scentproduct.repository.PendingUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,7 @@ public class PendingServiceImpl implements PendingService {
     private final PendingUserRepository pendingUserRepository;
 
     @Override
-    public void makeUserPending(Long userID) throws PendingIllegalStateException {
+    public void makeUserPending(Long userID) {
         pendingUserRepository.save(new PendingUserDTO(userID, true).toEntity());
     }
 
@@ -25,7 +24,7 @@ public class PendingServiceImpl implements PendingService {
     }
 
     @Override
-    public void clearPending(Long userId) throws PendingIllegalStateException {
+    public void clearPending(Long userId){
         pendingUserRepository.delete(getPendingUser(userId));
     }
 
