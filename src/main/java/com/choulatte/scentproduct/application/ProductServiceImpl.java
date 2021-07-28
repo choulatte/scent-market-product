@@ -3,8 +3,10 @@ package com.choulatte.scentproduct.application;
 import com.choulatte.scentproduct.domain.Brand;
 import com.choulatte.scentproduct.domain.Product;
 import com.choulatte.scentproduct.domain.StatusType;
+import com.choulatte.scentproduct.dto.ProductCreateReqDTO;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductPageDTO;
+import com.choulatte.scentproduct.dto.ProductUpdateReqDTO;
 import com.choulatte.scentproduct.exception.*;
 import com.choulatte.scentproduct.repository.BrandRepository;
 import com.choulatte.scentproduct.repository.PendingUserRepository;
@@ -27,9 +29,9 @@ public class ProductServiceImpl implements ProductService {
     private final PendingUserRepository pendingUserRepository;
 
     @Override
-    public ProductDTO createProduct(ProductDTO productDTO, Long userId, String username) {
+    public ProductDTO createProduct(ProductCreateReqDTO productCreateReqDTO, Long userId, String username) {
         if(verifyUserIsPending(userId)) throw new PendingUserException();
-        return productRepository.save(productDTO.toEntity(getBrand(productDTO.getBrandId())).setRegisteredDatetime(new Date())).toDTO();
+        return productRepository.save(productCreateReqDTO.toEntity(getBrand(productCreateReqDTO.getBrandId())).createProduct(userId, username)).toDTO();
     }
 
     @Override
@@ -64,8 +66,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(ProductDTO productDTO, Long userId, String username, Long productId) {
-        return productRepository.save(productDTO.toEntity(getBrand(productDTO.getBrandId()))).toDTO();
+    public ProductDTO updateProduct(ProductUpdateReqDTO productUpdateReqDTO, Long userId, String username, Long productId) {
+        return productRepository.save
+                (getProduct(productUpdateReqDTO.getProductId()).updateProduct(productUpdateReqDTO, getBrand(productUpdateReqDTO.getBrandId()), userId, username)).toDTO();
     }
 
     @Override
@@ -79,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO cancelProductBidding(Long productId, Long userId) {
         Product product = getProduct(productId);
         if(product.userIdIsEqual(userId))
-            return productRepository.save(product.updateStatus(StatusType.CANCELLED).updateValidity(false)).toDTO();
+            return productRepository.save(product.makeProductCancel(productId, userId)).toDTO();
         else throw new UserNotValidException();
     }
 
@@ -104,8 +107,8 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAllByUserId(userId);
     }
 
-    public List<Long> updateUserProductsStatus(Long userId, StatusType status) {
-        List<Product> list = productRepository.saveAll(getUserProducts(userId).stream().map(product -> product.updateStatus(status)).collect(Collectors.toList()));
+    public List<Long> makeProductPending(Long userId) {
+        List<Product> list = productRepository.saveAll(getUserProducts(userId).stream().map(Product::makeProductPending).collect(Collectors.toList()));
         return list.stream().map(Product::getProductId).collect(Collectors.toList());
     }
 

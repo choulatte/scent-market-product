@@ -1,8 +1,10 @@
 package com.choulatte.scentproduct.application;
 
 import com.choulatte.scentproduct.domain.StatusType;
+import com.choulatte.scentproduct.dto.ProductCreateReqDTO;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductPageDTO;
+import com.choulatte.scentproduct.dto.ProductUpdateReqDTO;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
@@ -17,13 +19,13 @@ public interface ProductService {
     ProductPageDTO getStatusProductPage(StatusType status, Pageable pageable);
     ProductPageDTO getProductsBetweenDatetimePage(Date start, Date end, Pageable pageable);
 
-    ProductDTO createProduct(ProductDTO productDTO, Long userIdx, String username);
-    ProductDTO updateProduct(ProductDTO productDTO, Long userIdx, String username, Long productId);
+    ProductDTO createProduct(ProductCreateReqDTO ProductCreateReqDTO, Long userIdx, String username);
+    ProductDTO updateProduct(ProductUpdateReqDTO productUpdateReqDTO, Long userIdx, String username, Long productId);
 
     void deleteProduct(Long productId, Long userId);
 
     ProductDTO cancelProductBidding(Long productId, Long userId);
-    List<Long> updateUserProductsStatus(Long userId, StatusType status);
+    List<Long> makeProductPending(Long userId);
     void makeProductsInvalid(Long userId);
     Boolean checkUserProductOngoing(Long userId);
 

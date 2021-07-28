@@ -8,7 +8,6 @@ import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.exception.OngoingProductPresentException;
 import com.choulatte.scentproduct.exception.ProductInvalidatingException;
 import io.grpc.stub.StreamObserver;
-import javafx.util.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +25,7 @@ public class ProductGrpcServiceImpl extends ProductServiceGrpc.ProductServiceImp
         try {
             pendingService.makeUserPending(request.getUserId());
             productService.checkUserProductOngoing(request.getUserId());
-            List<Long> productList = productService.updateUserProductsStatus(request.getUserId(), StatusType.PENDING);
+            List<Long> productList = productService.makeProductPending(request.getUserId());
 
             responseObserver.onNext(ProductServiceOuterClass.ProductsPendingResponse.newBuilder()
                     .setResult(ProductServiceOuterClass.ProductsPendingResponse.Result.OK)

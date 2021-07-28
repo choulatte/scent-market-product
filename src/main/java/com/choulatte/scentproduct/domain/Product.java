@@ -1,7 +1,9 @@
 package com.choulatte.scentproduct.domain;
 
 import com.choulatte.scentproduct.dto.ProductDTO;
+import com.choulatte.scentproduct.dto.ProductUpdateReqDTO;
 import com.choulatte.scentproduct.exception.ProductBadRequestException;
+import com.choulatte.scentproduct.exception.ProductIllegalStateException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -74,25 +76,60 @@ public class Product {
     private final List<Image> images = new ArrayList<>();
 
 
-    public Product setRegisteredDatetime(Date date) {
-        this.registeredDatetime = date;
+    public Product createProduct(Long userId, String username) {
+        if(!this.userId.equals(userId) || !this.username.equals(username)) throw new ProductBadRequestException();
+        if(!(new Date().getTime() < this.registeredDatetime.getTime() && this.registeredDatetime.getTime() < this.startingDatetime.getTime() && this.startingDatetime.getTime() < this.endingDatetime.getTime()))
+            throw new ProductIllegalStateException();
+
         return this;
     }
 
-    // TODO("Refactor Domain Methods")
-    public Product updateStatus(StatusType status){
-        this.status = status;
+    public Product updateProduct(ProductUpdateReqDTO productUpdateReqDTO, Brand brand, Long userId, String username) {
+        if(!this.userId.equals(userId) || !this.username.equals(username)) throw new ProductBadRequestException();
+        if(!(this.status.equals(StatusType.REGISTERED) || this.status.equals(StatusType.CANCELLED))) throw new ProductIllegalStateException();
+        this.productName = productUpdateReqDTO.getProductName();
+        this.productDetail = productUpdateReqDTO.getProductDetail();
+        this.startingPrice = productUpdateReqDTO.getStartingPrice();
+        this.startingDatetime = productUpdateReqDTO.getStartingDatetime();
+        this.endingDatetime = productUpdateReqDTO.getEndingDatetime();
+        this.visibility = productUpdateReqDTO.getVisibility();
+        this.lastModifiedDatetime = new Date();
+
+        return this;
+    }
+
+    public Product makeProductOngoing() {
+        if(!this.status.equals(StatusType.REGISTERED)) throw new ProductIllegalStateException();
+        this.status = StatusType.ONGOING;
         this.lastModifiedDatetime = new Date();
         return this;
     }
 
-    public Product updateValidity(Boolean validity) {
-        this.validity = validity;
+    public Product makeProductClosed() {
+        if(!this.status.equals(StatusType.ONGOING)) throw new ProductIllegalStateException();
+        this.status = StatusType.CLOSED;
+        this.lastModifiedDatetime = new Date();
+
         return this;
     }
 
-    public Product updateVisibility(Boolean visibility) {
-        this.visibility = visibility;
+    public Product makeProductCancel(Long productId, Long userId) {
+        if(!this.userId.equals(userId) || !this.productId.equals(productId)) throw new ProductBadRequestException();
+        if(!(this.status.equals(StatusType.REGISTERED) || this.status.equals(StatusType.ONGOING) || this.status.equals(StatusType.CONTRACTING))) throw new ProductIllegalStateException();
+        this.status = StatusType.CANCELLED;
+        this.lastModifiedDatetime = new Date();
+
+        return this;
+    }
+
+    //TODO("Contracting&Contracted")
+
+    public Product makeProductPending() {
+        if(this.status.equals(StatusType.ONGOING) || this.status.equals(StatusType.CONTRACTING)) throw new ProductIllegalStateException();
+        this.status = StatusType.PENDING;
+        this.visibility = false;
+        this.lastModifiedDatetime = new Date();
+
         return this;
     }
 
@@ -102,6 +139,12 @@ public class Product {
         this.validity = false;
         this.visibility = false;
         this.status = StatusType.DELETED;
+        this.lastModifiedDatetime = new Date();
+        return this;
+    }
+    public Product updateStatus(StatusType status){
+        this.status = status;
+        this.lastModifiedDatetime = new Date();
         return this;
     }
 

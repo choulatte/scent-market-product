@@ -2,8 +2,10 @@ package com.choulatte.scentproduct.controller;
 
 import com.choulatte.scentproduct.application.ProductService;
 import com.choulatte.scentproduct.domain.StatusType;
+import com.choulatte.scentproduct.dto.ProductCreateReqDTO;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductPageDTO;
+import com.choulatte.scentproduct.dto.ProductUpdateReqDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,13 +22,13 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping(value = "/register")
-    ResponseEntity<ProductDTO> setProduct(@RequestBody ProductDTO productDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username) {
-        return ResponseEntity.ok(productService.createProduct(productDTO, Long.parseLong(userIdx), username));
+    ResponseEntity<ProductDTO> setProduct(@RequestBody ProductCreateReqDTO productCreateReqDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username) {
+        return ResponseEntity.ok(productService.createProduct(productCreateReqDTO, Long.parseLong(userIdx), username));
     }
 
     @PutMapping(value = "/update/{id}")
-    ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username, @PathVariable("id") Long id) {
-        return ResponseEntity.ok(productService.updateProduct(productDTO, Long.parseLong(userIdx), username, id));
+    ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductUpdateReqDTO productUpdateReqDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username, @PathVariable("id") Long id) {
+        return ResponseEntity.ok(productService.updateProduct(productUpdateReqDTO, Long.parseLong(userIdx), username, id));
     }
 
     @DeleteMapping(value = "/delete/{id}")
