@@ -81,9 +81,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO cancelProductBidding(Long productId, Long userId) {
         Product product = getProduct(productId);
-        if(product.userIdIsEqual(userId))
-            return productRepository.save(product.makeProductCancel(productId, userId)).toDTO();
-        else throw new UserNotValidException();
+        return productRepository.save(product.makeProductCancel(productId, userId)).toDTO();
     }
 
     private ProductPageDTO getProductsPageDTO(Page<Product> products, Pageable pageable) {
@@ -104,7 +102,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private List<Product> getUserProducts(Long userId) {
-        return productRepository.findAllByUserId(userId);
+        return productRepository.findAllByUserIdAndStatusNot(userId, StatusType.DELETED);
     }
 
     public List<Long> makeProductPending(Long userId) {
@@ -127,7 +125,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Boolean checkUserProductOngoing(Long userId) {
-        if(productRepository.countProductByUserIdAndStatus(userId, StatusType.ONGOING).equals(0L)) {
+        //TODO("Need to test And(A Or B)")
+        if(productRepository.countProductByUserIdAndStatusOrStatus(userId, StatusType.ONGOING, StatusType.CONTRACTING).equals(0L)) {
             return true;
         }
         else throw new OngoingProductPresentException();

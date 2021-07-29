@@ -4,6 +4,7 @@ import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductUpdateReqDTO;
 import com.choulatte.scentproduct.exception.ProductBadRequestException;
 import com.choulatte.scentproduct.exception.ProductIllegalStateException;
+import com.choulatte.scentproduct.exception.UserNotValidException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -77,7 +78,7 @@ public class Product {
 
 
     public Product createProduct(Long userId, String username) {
-        if(!this.userId.equals(userId) || !this.username.equals(username)) throw new ProductBadRequestException();
+        if(!this.userId.equals(userId) || !this.username.equals(username)) throw new UserNotValidException();
         if(!(new Date().getTime() < this.registeredDatetime.getTime() && this.registeredDatetime.getTime() < this.startingDatetime.getTime() && this.startingDatetime.getTime() < this.endingDatetime.getTime()))
             throw new ProductIllegalStateException();
 
@@ -85,7 +86,7 @@ public class Product {
     }
 
     public Product updateProduct(ProductUpdateReqDTO productUpdateReqDTO, Brand brand, Long userId, String username) {
-        if(!this.userId.equals(userId) || !this.username.equals(username)) throw new ProductBadRequestException();
+        if(!this.userId.equals(userId) || !this.username.equals(username)) throw new UserNotValidException();
         if(!(this.status.equals(StatusType.REGISTERED) || this.status.equals(StatusType.CANCELLED))) throw new ProductIllegalStateException();
         this.productName = productUpdateReqDTO.getProductName();
         this.productDetail = productUpdateReqDTO.getProductDetail();
@@ -114,7 +115,7 @@ public class Product {
     }
 
     public Product makeProductCancel(Long productId, Long userId) {
-        if(!this.userId.equals(userId) || !this.productId.equals(productId)) throw new ProductBadRequestException();
+        if(!this.userId.equals(userId) || !this.productId.equals(productId)) throw new UserNotValidException();
         if(!(this.status.equals(StatusType.REGISTERED) || this.status.equals(StatusType.ONGOING) || this.status.equals(StatusType.CONTRACTING))) throw new ProductIllegalStateException();
         this.status = StatusType.CANCELLED;
         this.lastModifiedDatetime = new Date();
@@ -122,7 +123,21 @@ public class Product {
         return this;
     }
 
-    //TODO("Contracting&Contracted")
+    public Product makeProductContracting() {
+        if(!this.status.equals(StatusType.ONGOING)) throw new ProductIllegalStateException();
+        this.status = StatusType.CONTRACTING;
+        this.lastModifiedDatetime = new Date();
+
+        return this;
+    }
+
+    public Product makeProductContracted() {
+        if(!this.status.equals(StatusType.CONTRACTING)) throw new ProductIllegalStateException();
+        this.status = StatusType.CONTRACTED;
+        this.lastModifiedDatetime = new Date();
+
+        return this;
+    }
 
     public Product makeProductPending() {
         if(this.status.equals(StatusType.ONGOING) || this.status.equals(StatusType.CONTRACTING)) throw new ProductIllegalStateException();
@@ -134,22 +149,13 @@ public class Product {
     }
 
     public Product makeProductDelete(Long productId, Long userId){
-        if(!this.userId.equals(userId) || !this.productId.equals(productId)) throw new ProductBadRequestException();
-
+        if(!this.userId.equals(userId) || !this.productId.equals(productId)) throw new UserNotValidException();
+        if(this.status.equals(StatusType.ONGOING) || this.status.equals(StatusType.CONTRACTING)) throw new ProductIllegalStateException();
         this.validity = false;
         this.visibility = false;
         this.status = StatusType.DELETED;
         this.lastModifiedDatetime = new Date();
         return this;
-    }
-    public Product updateStatus(StatusType status){
-        this.status = status;
-        this.lastModifiedDatetime = new Date();
-        return this;
-    }
-
-    public Boolean userIdIsEqual(Long userId) {
-        return this.userId.equals(userId);
     }
 
     public ProductDTO toDTO() {
