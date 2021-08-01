@@ -1,10 +1,7 @@
 package com.choulatte.scentproduct.grpc;
 
-import com.choulatte.product.grpc.ProductServiceGrpc;
-import com.choulatte.product.grpc.ProductServiceOuterClass;
 import com.choulatte.scentproduct.application.PendingService;
 import com.choulatte.scentproduct.application.ProductService;
-import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.exception.OngoingProductPresentException;
 import com.choulatte.scentproduct.exception.ProductInvalidatingException;
 import io.grpc.stub.StreamObserver;
@@ -31,8 +28,11 @@ public class ProductGrpcServiceImpl extends ProductServiceGrpc.ProductServiceImp
                     .setResult(ProductServiceOuterClass.ProductsPendingResponse.Result.OK)
                     .addAllProductId(productList).build());
         } catch (OngoingProductPresentException e) {
+            List<Long> conflictProductList = productService.getConflictProducts(request.getUserId());
+
             responseObserver.onNext(ProductServiceOuterClass.ProductsPendingResponse.newBuilder()
-            .setResult(ProductServiceOuterClass.ProductsPendingResponse.Result.CONFLICT).build());
+                    .setResult(ProductServiceOuterClass.ProductsPendingResponse.Result.CONFLICT)
+                    .addAllProductId(conflictProductList).build());
         }
         responseObserver.onCompleted();
     }
@@ -48,6 +48,22 @@ public class ProductGrpcServiceImpl extends ProductServiceGrpc.ProductServiceImp
         } catch (ProductInvalidatingException e) {
             responseObserver.onNext(ProductServiceOuterClass.ProductsInvalidatingResponse.newBuilder()
                 .setResult(ProductServiceOuterClass.ProductsInvalidatingResponse.Result.CONFLICT).build());
+        }
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void undoUserProductsPending(ProductServiceOuterClass.ProductsPendingRequest request, StreamObserver<ProductServiceOuterClass.ProductsPendingResponse> responseObserver) {
+        try {
+            pendingService.makeUserPending(request.getUserId());
+            List<Long> productList = productService.releaseProductPending(request.getUserId());
+
+            responseObserver.onNext(ProductServiceOuterClass.ProductsPendingResponse.newBuilder()
+                    .setResult(ProductServiceOuterClass.ProductsPendingResponse.Result.OK)
+                    .addAllProductId(productList).build());
+        } catch (OngoingProductPresentException e) {
+            responseObserver.onNext(ProductServiceOuterClass.ProductsPendingResponse.newBuilder()
+                    .setResult(ProductServiceOuterClass.ProductsPendingResponse.Result.CONFLICT).build());
         }
         responseObserver.onCompleted();
     }
