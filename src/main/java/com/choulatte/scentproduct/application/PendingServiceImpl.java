@@ -24,7 +24,7 @@ public class PendingServiceImpl implements PendingService {
     }
 
     @Override
-    public void clearPending(Long userId){
+    public void releasePending(Long userId){
         pendingUserRepository.delete(getPendingUser(userId));
     }
 

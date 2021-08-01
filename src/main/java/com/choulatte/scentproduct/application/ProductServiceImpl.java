@@ -7,7 +7,10 @@ import com.choulatte.scentproduct.dto.ProductCreateReqDTO;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductPageDTO;
 import com.choulatte.scentproduct.dto.ProductUpdateReqDTO;
-import com.choulatte.scentproduct.exception.*;
+import com.choulatte.scentproduct.exception.BrandNotFoundException;
+import com.choulatte.scentproduct.exception.OngoingProductPresentException;
+import com.choulatte.scentproduct.exception.PendingUserException;
+import com.choulatte.scentproduct.exception.ProductNotFoundException;
 import com.choulatte.scentproduct.repository.BrandRepository;
 import com.choulatte.scentproduct.repository.PendingUserRepository;
 import com.choulatte.scentproduct.repository.ProductRepository;
@@ -113,8 +116,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void makeProductsInvalid(Long userId) {
         List<Product> userProducts = getUserProducts(userId);
-        List<Product> pendingProducts = productRepository.findAllByUserIdAndStatus(userId, StatusType.PENDING);
-        if(userProducts.size() != pendingProducts.size()) throw new ProductInvalidatingException();
 
         productRepository.saveAll(userProducts.stream().map(product -> product.makeProductDelete(product.getProductId(), userId)).collect(Collectors.toList()));
     }
@@ -130,6 +131,18 @@ public class ProductServiceImpl implements ProductService {
             return true;
         }
         else throw new OngoingProductPresentException();
+    }
+
+    @Override
+    public List<Long> getConflictProducts(Long userId) {
+        return productRepository.findAllByUserIdAndStatusOrStatus(userId, StatusType.ONGOING, StatusType.CONTRACTING);
+    }
+
+    @Override
+    public List<Long> releaseProductPending(Long userId) {
+        List<Product> products = productRepository.findAllByUserIdAndStatus(userId, StatusType.PENDING);
+        return productRepository.saveAll(products.stream().map(Product::releasePending).collect(Collectors.toList()))
+                .stream().map(Product::getProductId).collect(Collectors.toList());
     }
 
 }

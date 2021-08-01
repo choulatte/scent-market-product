@@ -2,7 +2,6 @@ package com.choulatte.scentproduct.domain;
 
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductUpdateReqDTO;
-import com.choulatte.scentproduct.exception.ProductBadRequestException;
 import com.choulatte.scentproduct.exception.ProductIllegalStateException;
 import com.choulatte.scentproduct.exception.UserNotValidException;
 import lombok.AllArgsConstructor;
@@ -96,6 +95,8 @@ public class Product {
         this.visibility = productUpdateReqDTO.getVisibility();
         this.lastModifiedDatetime = new Date();
 
+        this.brand = brand;
+
         return this;
     }
 
@@ -141,11 +142,17 @@ public class Product {
 
     public Product makeProductPending() {
         if(this.status.equals(StatusType.ONGOING) || this.status.equals(StatusType.CONTRACTING)) throw new ProductIllegalStateException();
-        this.status = StatusType.PENDING;
-        this.visibility = false;
+        if(this.status.equals(StatusType.REGISTERED)) this.status = StatusType.PENDING;
         this.lastModifiedDatetime = new Date();
 
         return this;
+    }
+
+    public Product releasePending() {
+        if(!this.equals(StatusType.PENDING)) throw new ProductIllegalStateException();
+        this.status = StatusType.REGISTERED;
+        this.lastModifiedDatetime = new Date();
+         return this;
     }
 
     public Product makeProductDelete(Long productId, Long userId){

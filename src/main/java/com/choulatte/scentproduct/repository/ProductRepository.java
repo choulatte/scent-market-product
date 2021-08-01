@@ -23,7 +23,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllByRegisteredDatetimeBetweenAndVisibilityTrue(Date start, Date end, Pageable pageable);
 
     List<Product> findAllByUserIdAndStatusNot(Long userId, StatusType status);
-    List<Product> findAllByUserIdAndStatus(Long userID, StatusType status);
+    List<Product> findAllByUserIdAndStatus(Long userId, StatusType status);
+    List<Long> findAllByUserIdAndStatusOrStatus(Long userID, StatusType status1, StatusType status2);
 
     Long countProductByUserIdAndStatusOrStatus(Long userId, StatusType status1, StatusType status2);
 }

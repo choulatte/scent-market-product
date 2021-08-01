@@ -28,5 +28,7 @@ public interface ProductService {
     List<Long> makeProductPending(Long userId);
     void makeProductsInvalid(Long userId);
     Boolean checkUserProductOngoing(Long userId);
+    List<Long> getConflictProducts(Long userId);
+    List<Long> releaseProductPending(Long userId);
 
 }
