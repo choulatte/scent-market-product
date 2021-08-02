@@ -149,7 +149,7 @@ public class Product {
     }
 
     public Product releasePending() {
-        if(!this.equals(StatusType.PENDING)) throw new ProductIllegalStateException();
+        if(!this.status.equals(StatusType.PENDING)) throw new ProductIllegalStateException();
         this.status = StatusType.REGISTERED;
         this.lastModifiedDatetime = new Date();
          return this;
