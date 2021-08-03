@@ -23,4 +23,5 @@ public class ProductUpdateReqDTO {
     private Date endingDatetime;
     private Long brandId;
     private Boolean visibility;
+    private StatusType status;
 }

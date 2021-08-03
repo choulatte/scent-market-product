@@ -2,6 +2,7 @@ package com.choulatte.scentproduct.domain;
 
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductUpdateReqDTO;
+import com.choulatte.scentproduct.exception.ProductBadRequestException;
 import com.choulatte.scentproduct.exception.ProductIllegalStateException;
 import com.choulatte.scentproduct.exception.UserNotValidException;
 import lombok.AllArgsConstructor;
@@ -87,6 +88,7 @@ public class Product {
     public Product updateProduct(ProductUpdateReqDTO productUpdateReqDTO, Brand brand, Long userId, String username) {
         if(!this.userId.equals(userId) || !this.username.equals(username)) throw new UserNotValidException();
         if(!(this.status.equals(StatusType.REGISTERED) || this.status.equals(StatusType.CANCELLED))) throw new ProductIllegalStateException();
+        if(!(productUpdateReqDTO.getStatus().equals(StatusType.REGISTERED) || productUpdateReqDTO.getStatus().equals(StatusType.CANCELLED))) throw new ProductBadRequestException();
         this.productName = productUpdateReqDTO.getProductName();
         this.productDetail = productUpdateReqDTO.getProductDetail();
         this.startingPrice = productUpdateReqDTO.getStartingPrice();
@@ -94,6 +96,7 @@ public class Product {
         this.endingDatetime = productUpdateReqDTO.getEndingDatetime();
         this.visibility = productUpdateReqDTO.getVisibility();
         this.lastModifiedDatetime = new Date();
+        this.status = productUpdateReqDTO.getStatus();
 
         this.brand = brand;
 
