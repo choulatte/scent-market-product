@@ -2,7 +2,6 @@ package com.choulatte.scentproduct.dto;
 
 import com.choulatte.scentproduct.domain.Brand;
 import com.choulatte.scentproduct.domain.Product;
-import com.choulatte.scentproduct.domain.StatusType;
 import lombok.*;
 
 import java.util.Date;
@@ -24,7 +23,7 @@ public class ProductDTO {
     private Date endingDatetime;
     private Boolean validity;
     private Boolean visibility;
-    private StatusType status;
+    private Product.StatusType status;
     private Long brandId;
 
     public Product toEntity(Brand brand) {

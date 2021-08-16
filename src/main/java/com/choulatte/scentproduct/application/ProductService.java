@@ -1,6 +1,6 @@
 package com.choulatte.scentproduct.application;
 
-import com.choulatte.scentproduct.domain.StatusType;
+import com.choulatte.scentproduct.domain.Product;
 import com.choulatte.scentproduct.dto.ProductCreateReqDTO;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductPageDTO;
@@ -16,7 +16,7 @@ public interface ProductService {
     ProductDTO getProductDetail(Long productId);
 
     ProductPageDTO getBrandProductPage(Long brandId, Pageable pageable);
-    ProductPageDTO getStatusProductPage(StatusType status, Pageable pageable);
+    ProductPageDTO getStatusProductPage(Product.StatusType status, Pageable pageable);
     ProductPageDTO getProductsBetweenDatetimePage(Date start, Date end, Pageable pageable);
 
     ProductDTO createProduct(ProductCreateReqDTO ProductCreateReqDTO, Long userIdx, String username);

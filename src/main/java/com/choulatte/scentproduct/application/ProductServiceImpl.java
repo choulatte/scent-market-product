@@ -2,7 +2,6 @@ package com.choulatte.scentproduct.application;
 
 import com.choulatte.scentproduct.domain.Brand;
 import com.choulatte.scentproduct.domain.Product;
-import com.choulatte.scentproduct.domain.StatusType;
 import com.choulatte.scentproduct.dto.ProductCreateReqDTO;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductPageDTO;
@@ -40,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
             @CacheEvict(value = "product", key = "#productCreateReqDTO.productId"),
             @CacheEvict(value = "userProducts", key = "#userId"),
             @CacheEvict(value = "allProducts", allEntries = true),
-            @CacheEvict(value = "statusProducts", key = "T(com.choulatte.scentproduct.domain.StatusType).REGISTERED"),
+            @CacheEvict(value = "statusProducts", key = "T(com.choulatte.scentproduct.domain.Product$StatusType).REGISTERED"),
             @CacheEvict(value = "datetimeProducts", allEntries = true)},
             put = {
             @CachePut(value = "product", key = "#result.productId")
@@ -78,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Cacheable(value = "statusProducts", key = "#status", condition = "#pageable.pageNumber == 0")
-    public ProductPageDTO getStatusProductPage(StatusType status, Pageable pageable) {
+    public ProductPageDTO getStatusProductPage(Product.StatusType status, Pageable pageable) {
         return getProductsPageDTO(productRepository.findAllByStatusAndVisibilityTrue(status, pageable), pageable);
     }
 
@@ -147,7 +146,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private List<Product> getUserProducts(Long userId) {
-        return productRepository.findAllByUserIdAndStatusNot(userId, StatusType.DELETED);
+        return productRepository.findAllByUserIdAndStatusNot(userId, Product.StatusType.DELETED);
     }
 
     public List<Long> makeProductPending(Long userId) {
@@ -176,7 +175,7 @@ public class ProductServiceImpl implements ProductService {
 
     public Boolean checkUserProductOngoing(Long userId) {
         //TODO("Need to test And(A Or B)")
-        if(productRepository.countProductByUserIdAndStatusOrStatus(userId, StatusType.ONGOING, StatusType.CONTRACTING).equals(0L)) {
+        if(productRepository.countProductByUserIdAndStatusOrStatus(userId, Product.StatusType.ONGOING, Product.StatusType.CONTRACTING).equals(0L)) {
             return true;
         }
         else throw new OngoingProductPresentException();
@@ -184,12 +183,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Long> getConflictProducts(Long userId) {
-        return productRepository.findAllByUserIdAndStatusOrStatus(userId, StatusType.ONGOING, StatusType.CONTRACTING);
+        return productRepository.findAllByUserIdAndStatusOrStatus(userId, Product.StatusType.ONGOING, Product.StatusType.CONTRACTING);
     }
 
     @Override
     public List<Long> releaseProductPending(Long userId) {
-        List<Product> products = productRepository.findAllByUserIdAndStatus(userId, StatusType.PENDING);
+        List<Product> products = productRepository.findAllByUserIdAndStatus(userId, Product.StatusType.PENDING);
         return productRepository.saveAll(products.stream().map(Product::releasePending).collect(Collectors.toList()))
                 .stream().map(Product::getProductId).collect(Collectors.toList());
     }

@@ -182,4 +182,15 @@ public class Product {
                 .status(this.status)
                 .brandId(this.brand.getBrandId()).build();
     }
+
+    public enum StatusType {
+        REGISTERED,
+        ONGOING,
+        CONTRACTING,
+        CONTRACTED,
+        CANCELLED,
+        CLOSED,
+        PENDING,
+        DELETED
+    }
 }

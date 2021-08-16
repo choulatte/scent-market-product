@@ -1,7 +1,7 @@
 package com.choulatte.scentproduct.controller;
 
 import com.choulatte.scentproduct.application.ProductService;
-import com.choulatte.scentproduct.domain.StatusType;
+import com.choulatte.scentproduct.domain.Product;
 import com.choulatte.scentproduct.dto.ProductCreateReqDTO;
 import com.choulatte.scentproduct.dto.ProductDTO;
 import com.choulatte.scentproduct.dto.ProductPageDTO;
@@ -53,7 +53,7 @@ public class ProductController {
 
     @GetMapping(value = "/{status}")
     ResponseEntity<ProductPageDTO> getBrandProducts(@PathVariable("status") String status, Pageable pageable) {
-        return ResponseEntity.ok(productService.getStatusProductPage(StatusType.valueOf(status), pageable));
+        return ResponseEntity.ok(productService.getStatusProductPage(Product.StatusType.valueOf(status), pageable));
     }
 
     @GetMapping(value = "/{id}")

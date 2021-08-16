@@ -1,10 +1,8 @@
 package com.choulatte.scentproduct.repository;
 
 import com.choulatte.scentproduct.domain.Product;
-import com.choulatte.scentproduct.domain.StatusType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,12 +17,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllByVisibilityIsTrue(Pageable pageable);
     Page<Product> findAllByUserIdAndVisibilityTrue(Long userId, Pageable pageable);
     Page<Product> findAllByBrandBrandIdAndVisibilityTrue(Long brandId, Pageable pageable);
-    Page<Product> findAllByStatusAndVisibilityTrue(StatusType status, Pageable pageable);
+    Page<Product> findAllByStatusAndVisibilityTrue(Product.StatusType status, Pageable pageable);
     Page<Product> findAllByRegisteredDatetimeBetweenAndVisibilityTrue(Date start, Date end, Pageable pageable);
 
-    List<Product> findAllByUserIdAndStatusNot(Long userId, StatusType status);
-    List<Product> findAllByUserIdAndStatus(Long userId, StatusType status);
-    List<Long> findAllByUserIdAndStatusOrStatus(Long userID, StatusType status1, StatusType status2);
+    List<Product> findAllByUserIdAndStatusNot(Long userId, Product.StatusType status);
+    List<Product> findAllByUserIdAndStatus(Long userId, Product.StatusType status);
+    List<Long> findAllByUserIdAndStatusOrStatus(Long userID, Product.StatusType status1, Product.StatusType status2);
 
-    Long countProductByUserIdAndStatusOrStatus(Long userId, StatusType status1, StatusType status2);
+    Long countProductByUserIdAndStatusOrStatus(Long userId, Product.StatusType status1, Product.StatusType status2);
 }

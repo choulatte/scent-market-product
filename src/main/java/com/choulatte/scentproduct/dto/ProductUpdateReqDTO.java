@@ -1,8 +1,6 @@
 package com.choulatte.scentproduct.dto;
 
-import com.choulatte.scentproduct.domain.Brand;
 import com.choulatte.scentproduct.domain.Product;
-import com.choulatte.scentproduct.domain.StatusType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,5 +21,5 @@ public class ProductUpdateReqDTO {
     private Date endingDatetime;
     private Long brandId;
     private Boolean visibility;
-    private StatusType status;
+    private Product.StatusType status;
 }
