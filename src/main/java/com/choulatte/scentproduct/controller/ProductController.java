@@ -22,18 +22,18 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping(value = "/register")
-    ResponseEntity<ProductDTO> setProduct(@RequestBody ProductCreateReqDTO productCreateReqDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username) {
+    ResponseEntity<ProductDTO> setProduct(@RequestBody ProductCreateReqDTO productCreateReqDTO, @RequestHeader("User-Idx") String userIdx, @RequestHeader("Username") String username) {
         return ResponseEntity.ok(productService.createProduct(productCreateReqDTO, Long.parseLong(userIdx), username));
     }
 
     @PutMapping(value = "/update/{id}")
-    ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductUpdateReqDTO productUpdateReqDTO, @RequestHeader("userId") String userIdx, @RequestHeader("username") String username, @PathVariable("id") Long id) {
+    ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductUpdateReqDTO productUpdateReqDTO, @RequestHeader("User-Idx") String userIdx, @RequestHeader("Username") String username, @PathVariable("id") Long id) {
         return ResponseEntity.ok(productService.updateProduct(productUpdateReqDTO, Long.parseLong(userIdx), username, id));
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    void deleteProduct(@PathVariable("id") Long id, @RequestHeader("userId") String userId) {
-        productService.deleteProduct(id, Long.parseLong(userId));
+    void deleteProduct(@PathVariable("id") Long id, @RequestHeader("User-Idx") String userIdx) {
+        productService.deleteProduct(id, Long.parseLong(userIdx));
     }
 
     @GetMapping(value = "/all")
@@ -42,13 +42,13 @@ public class ProductController {
     }
 
     @GetMapping(value = "/myitems")
-    public ResponseEntity<ProductPageDTO> getUserProducts(@RequestHeader("userId") String userId, Pageable pageable) {
-        return ResponseEntity.ok(productService.getUserProductPage(Long.parseLong(userId), pageable));
+    public ResponseEntity<ProductPageDTO> getUserProducts(@RequestHeader("User-Idx") String userIdx, Pageable pageable) {
+        return ResponseEntity.ok(productService.getUserProductPage(Long.parseLong(userIdx), pageable));
     }
 
     @GetMapping(value = "/{brand}")
-    ResponseEntity<ProductPageDTO> getBrandProducts(@PathVariable("brand") Long brandId, Pageable pageable) {
-        return ResponseEntity.ok(productService.getBrandProductPage(brandId, pageable));
+    ResponseEntity<ProductPageDTO> getBrandProducts(@PathVariable("brand") Long brandIdx, Pageable pageable) {
+        return ResponseEntity.ok(productService.getBrandProductPage(brandIdx, pageable));
     }
 
     @GetMapping(value = "/{status}")
@@ -57,14 +57,14 @@ public class ProductController {
     }
 
     @GetMapping(value = "/{id}")
-    ResponseEntity<ProductDTO> getProduct(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(productService.getProductDetail(id));
+    ResponseEntity<ProductDTO> getProduct(@PathVariable("id") Long productIdx) {
+        return ResponseEntity.ok(productService.getProductDetail(productIdx));
 
     }
 
     @GetMapping(value = "/update/{id}")
-    ResponseEntity<ProductDTO> getUserProduct(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(productService.getProductDetail(id));
+    ResponseEntity<ProductDTO> getUserProduct(@PathVariable("id") Long productIdx) {
+        return ResponseEntity.ok(productService.getProductDetail(productIdx));
     }
 
     @GetMapping(value = "")
@@ -74,8 +74,8 @@ public class ProductController {
     }
 
     @PostMapping(value = "/cancel")
-    ResponseEntity<ProductDTO> cancelProductBidding(@RequestParam("productId") Long productId, @RequestHeader("userId") String userId) {
-        return ResponseEntity.ok(productService.cancelProductBidding(productId, Long.parseLong(userId)));
+    ResponseEntity<ProductDTO> cancelProductBidding(@RequestParam("productId") Long productIdx, @RequestHeader("User-Idx") String userIdx) {
+        return ResponseEntity.ok(productService.cancelProductBidding(productIdx, Long.parseLong(userIdx)));
     }
 
 }

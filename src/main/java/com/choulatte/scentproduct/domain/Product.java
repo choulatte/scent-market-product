@@ -26,7 +26,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_idx")
-    private Long productId;
+    private Long productIdx;
 
     @Column(nullable = false, name = "product_name")
     private String productName;
@@ -35,7 +35,7 @@ public class Product {
     private String productDetail;
 
     @Column(nullable = false, name = "user_idx")
-    private Long userId;
+    private Long userIdx;
 
     @Column(nullable = false, name = "username")
     private String username;
@@ -77,16 +77,16 @@ public class Product {
     private final List<Image> images = new ArrayList<>();
 
 
-    public Product createProduct(Long userId, String username) {
-        if(!this.userId.equals(userId) || !this.username.equals(username)) throw new UserNotValidException();
+    public Product createProduct(Long userIdx, String username) {
+        if(!this.userIdx.equals(userIdx) || !this.username.equals(username)) throw new UserNotValidException();
         if(!(new Date().getTime() < this.registeredDatetime.getTime() && this.registeredDatetime.getTime() < this.startingDatetime.getTime() && this.startingDatetime.getTime() < this.endingDatetime.getTime()))
             throw new ProductIllegalStateException();
 
         return this;
     }
 
-    public Product updateProduct(ProductUpdateReqDTO productUpdateReqDTO, Brand brand, Long userId, String username) {
-        if(!this.userId.equals(userId) || !this.username.equals(username)) throw new UserNotValidException();
+    public Product updateProduct(ProductUpdateReqDTO productUpdateReqDTO, Brand brand, Long userIdx, String username) {
+        if(!this.userIdx.equals(userIdx) || !this.username.equals(username)) throw new UserNotValidException();
         if(!(this.status.equals(StatusType.REGISTERED) || this.status.equals(StatusType.CANCELLED))) throw new ProductIllegalStateException();
         if(!(productUpdateReqDTO.getStatus().equals(StatusType.REGISTERED) || productUpdateReqDTO.getStatus().equals(StatusType.CANCELLED))) throw new ProductBadRequestException();
         this.productName = productUpdateReqDTO.getProductName();
@@ -119,7 +119,7 @@ public class Product {
     }
 
     public Product makeProductCancel(Long productId, Long userId) {
-        if(!this.userId.equals(userId) || !this.productId.equals(productId)) throw new UserNotValidException();
+        if(!this.userIdx.equals(userId) || !this.productIdx.equals(productId)) throw new UserNotValidException();
         if(!(this.status.equals(StatusType.REGISTERED) || this.status.equals(StatusType.ONGOING) || this.status.equals(StatusType.CONTRACTING))) throw new ProductIllegalStateException();
         this.status = StatusType.CANCELLED;
         this.lastModifiedDatetime = new Date();
@@ -159,7 +159,7 @@ public class Product {
     }
 
     public Product makeProductDelete(Long productId, Long userId){
-        if(!this.userId.equals(userId) || !this.productId.equals(productId)) throw new UserNotValidException();
+        if(!this.userIdx.equals(userId) || !this.productIdx.equals(productId)) throw new UserNotValidException();
         if(this.status.equals(StatusType.ONGOING) || this.status.equals(StatusType.CONTRACTING)) throw new ProductIllegalStateException();
         this.validity = false;
         this.visibility = false;
@@ -169,10 +169,10 @@ public class Product {
     }
 
     public ProductDTO toDTO() {
-        return ProductDTO.builder().productId(this.productId)
+        return ProductDTO.builder().productIdx(this.productIdx)
                 .productName(this.productName)
                 .productDetail(this.productDetail)
-                .userId(this.userId).username(this.username)
+                .userIdx(this.userIdx).username(this.username)
                 .startingPrice(this.startingPrice)
                 .startingDatetime(this.startingDatetime)
                 .endingDatetime(this.endingDatetime)
@@ -180,7 +180,7 @@ public class Product {
                 .lastModifiedDatetime(this.lastModifiedDatetime)
                 .validity(this.validity).visibility(this.visibility)
                 .status(this.status)
-                .brandId(this.brand.getBrandId()).build();
+                .brandId(this.brand.getBrandIdx()).build();
     }
 
     public enum StatusType {

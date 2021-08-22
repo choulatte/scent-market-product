@@ -18,7 +18,7 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_idx")
-    private Long imageId;
+    private Long imageIdx;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product")

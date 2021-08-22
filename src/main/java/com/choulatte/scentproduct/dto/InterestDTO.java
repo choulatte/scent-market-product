@@ -11,14 +11,14 @@ import java.util.Date;
 @Getter
 @Builder
 public class InterestDTO {
-    private Long interestId;
-    private Long userId;
-    private Long productId;
+    private Long interestIdx;
+    private Long userIdx;
+    private Long productIdx;
     private Date registeredDatetime;
 
     public Interest toEntity(Product product) {
-        return Interest.builder().interestId(this.interestId)
-                .userId(this.userId)
+        return Interest.builder().interestIdx(this.interestIdx)
+                .userIdx(this.userIdx)
                 .product(product)
                 .registeredDatetime(new Date()).build();
     }

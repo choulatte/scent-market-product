@@ -17,10 +17,10 @@ public class PendingUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pending_idx")
-    private Long pendingUserId;
+    private Long pendingUserIdx;
 
     @Column(nullable = false, name = "user_idx")
-    private Long userId;
+    private Long userIdx;
 
     @Column(name = "user_validation")
     private Boolean userValidation;
