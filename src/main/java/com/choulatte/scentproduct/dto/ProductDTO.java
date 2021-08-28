@@ -11,10 +11,10 @@ import java.util.Date;
 @Getter
 @Builder
 public class ProductDTO {
-    private Long productIdx;
+    private Long productId;
     private String productName;
     private String productDetail;
-    private Long userIdx;
+    private Long userId;
     private String username;
     private Double startingPrice;
     private Date registerDatetime;
@@ -27,10 +27,10 @@ public class ProductDTO {
     private Long brandId;
 
     public Product toEntity(Brand brand) {
-        return Product.builder().productIdx(this.productIdx)
+        return Product.builder().productId(this.productId)
                 .productName(this.productName)
                 .productDetail(this.productDetail)
-                .userIdx(this.userIdx).username(this.username)
+                .userId(this.userId).username(this.username)
                 .startingPrice(this.startingPrice)
                 .startingDatetime(this.startingDatetime)
                 .endingDatetime(this.endingDatetime)

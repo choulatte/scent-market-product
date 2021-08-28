@@ -16,7 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findAllByVisibilityIsTrue(Pageable pageable);
     Page<Product> findAllByUserIdAndVisibilityTrue(Long userId, Pageable pageable);
-    Page<Product> findAllByBrandBrandIdAndVisibilityTrue(Long brandId, Pageable pageable);
+    Page<Product> findAllByBrandBrandNameAndVisibilityTrue(String brandName, Pageable pageable);
     Page<Product> findAllByStatusAndVisibilityTrue(Product.StatusType status, Pageable pageable);
     Page<Product> findAllByRegisteredDatetimeBetweenAndVisibilityTrue(Date start, Date end, Pageable pageable);
 

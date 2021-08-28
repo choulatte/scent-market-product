@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class PendingUserDTO {
-    private Long userIdx;
+    private Long userId;
     private Boolean userValidation;
 
     public PendingUser toEntity(){
         return PendingUser.builder()
-                .userIdx(this.userIdx)
+                .userId(this.userId)
                 .userValidation(this.userValidation)
                 .build();
     }

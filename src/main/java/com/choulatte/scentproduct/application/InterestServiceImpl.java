@@ -23,7 +23,7 @@ public class InterestServiceImpl implements InterestService {
 
     @Override
     public InterestDTO createInterest(InterestDTO interestDTO) {
-        return interestRepository.save(interestDTO.toEntity(getProduct(interestDTO.getProductIdx()))).toDTO();
+        return interestRepository.save(interestDTO.toEntity(getProduct(interestDTO.getProductId()))).toDTO();
     }
 
     @Override

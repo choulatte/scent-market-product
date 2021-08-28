@@ -21,7 +21,7 @@ public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "brand_idx")
-    private Long brandIdx;
+    private Long brandId;
 
     @Column(nullable = false, name = "brand_name")
     private String brandName;
@@ -30,7 +30,7 @@ public class Brand {
     private final List<Product> products = new ArrayList<>();
 
     public BrandDTO toDTO() {
-        return BrandDTO.builder().brandIdx(this.brandIdx)
+        return BrandDTO.builder().brandId(this.brandId)
                 .brandName(this.brandName).build();
     }
 }

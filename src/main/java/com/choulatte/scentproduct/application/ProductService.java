@@ -15,7 +15,7 @@ public interface ProductService {
     ProductPageDTO getProductPage(Pageable pageable);
     ProductDTO getProductDetail(Long productId);
 
-    ProductPageDTO getBrandProductPage(Long brandId, Pageable pageable);
+    ProductPageDTO getBrandProductPage(String brandName, Pageable pageable);
     ProductPageDTO getStatusProductPage(Product.StatusType status, Pageable pageable);
     ProductPageDTO getProductsBetweenDatetimePage(Date start, Date end, Pageable pageable);
 

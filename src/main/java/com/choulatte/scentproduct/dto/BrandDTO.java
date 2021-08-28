@@ -14,12 +14,12 @@ import java.util.List;
 @Builder
 public class BrandDTO {
 
-    private Long brandIdx;
+    private Long brandId;
     private String brandName;
     private List<ProductDTO> products;
 
     public Brand toEntity() {
-        return Brand.builder().brandIdx(this.getBrandIdx())
+        return Brand.builder().brandId(this.getBrandId())
                 .brandName(this.brandName).build();
     }
 }

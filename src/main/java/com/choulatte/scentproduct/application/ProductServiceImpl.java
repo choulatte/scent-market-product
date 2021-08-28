@@ -71,8 +71,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Cacheable(value = "brandProducts", key = "#brandId", condition = "#pageable.pageNumber == 0")
-    public ProductPageDTO getBrandProductPage(Long brandId, Pageable pageable) {
-        return getProductsPageDTO(productRepository.findAllByBrandBrandIdAndVisibilityTrue(brandId, pageable), pageable);
+    public ProductPageDTO getBrandProductPage(String brandName, Pageable pageable) {
+        return getProductsPageDTO(productRepository.findAllByBrandBrandNameAndVisibilityTrue(brandName, pageable), pageable);
     }
 
     @Override
@@ -151,7 +151,7 @@ public class ProductServiceImpl implements ProductService {
 
     public List<Long> makeProductPending(Long userId) {
         List<Product> list = productRepository.saveAll(getUserProducts(userId).stream().map(Product::makeProductPending).collect(Collectors.toList()));
-        return list.stream().map(Product::getProductIdx).collect(Collectors.toList());
+        return list.stream().map(Product::getProductId).collect(Collectors.toList());
     }
 
     @Override // Delete랑 합치는거 고려해보기~
@@ -165,7 +165,7 @@ public class ProductServiceImpl implements ProductService {
     public void makeProductsInvalid(Long userId) {
         List<Product> userProducts = getUserProducts(userId);
 
-        productRepository.saveAll(userProducts.stream().map(product -> product.makeProductDelete(product.getProductIdx(), userId)).collect(Collectors.toList()));
+        productRepository.saveAll(userProducts.stream().map(product -> product.makeProductDelete(product.getProductId(), userId)).collect(Collectors.toList()));
     }
 
 
@@ -190,7 +190,7 @@ public class ProductServiceImpl implements ProductService {
     public List<Long> releaseProductPending(Long userId) {
         List<Product> products = productRepository.findAllByUserIdAndStatus(userId, Product.StatusType.PENDING);
         return productRepository.saveAll(products.stream().map(Product::releasePending).collect(Collectors.toList()))
-                .stream().map(Product::getProductIdx).collect(Collectors.toList());
+                .stream().map(Product::getProductId).collect(Collectors.toList());
     }
 
 }

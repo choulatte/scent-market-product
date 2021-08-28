@@ -19,8 +19,8 @@ public class InterestController {
     private final ProductService productService;
 
     @GetMapping(value = "")
-    ResponseEntity<List<ProductDTO>> getUserInterestingProducts(@RequestHeader("User-Idx") String userIdx) {
-        return ResponseEntity.ok(interestService.getUserInterestingProduct(Long.parseLong(userIdx)));
+    ResponseEntity<List<ProductDTO>> getUserInterestingProducts(@RequestHeader("User-Idx") String userId) {
+        return ResponseEntity.ok(interestService.getUserInterestingProduct(Long.parseLong(userId)));
     }
 
     @PostMapping(value = "")
@@ -29,8 +29,8 @@ public class InterestController {
     }
 
     @DeleteMapping(value = "/{id}")
-    void deleteInterest(@PathVariable("id") Long id, @RequestHeader("User-Idx") String userIdx) {
-        interestService.deleteInterest(Long.parseLong(userIdx), id);
+    void deleteInterest(@PathVariable("id") Long id, @RequestHeader("User-Idx") String userId) {
+        interestService.deleteInterest(Long.parseLong(userId), id);
     }
 
 }

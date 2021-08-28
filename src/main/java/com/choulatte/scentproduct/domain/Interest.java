@@ -20,10 +20,10 @@ public class Interest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "interest_idx")
-    private Long interestIdx;
+    private Long interestId;
 
     @Column(name = "user_idx")
-    private Long userIdx;
+    private Long userId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "interesting_product")
@@ -34,9 +34,9 @@ public class Interest {
     private Date registeredDatetime;
 
     public InterestDTO toDTO() {
-        return InterestDTO.builder().interestIdx(this.interestIdx)
-                .userIdx(this.userIdx)
-                .productIdx(this.product.getProductIdx())
+        return InterestDTO.builder().interestId(this.interestId)
+                .userId(this.userId)
+                .productId(this.product.getProductId())
                 .registeredDatetime(this.registeredDatetime).build();
     }
 }
