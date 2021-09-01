@@ -16,6 +16,11 @@ public class InterestDTO {
     private Long productId;
     private Date registeredDatetime;
 
+    public InterestDTO setUserId(Long userId) {
+        this.userId = userId;
+        return this;
+    }
+
     public Interest toEntity(Product product) {
         return Interest.builder().interestId(this.interestId)
                 .userId(this.userId)

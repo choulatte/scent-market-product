@@ -4,6 +4,9 @@ import com.choulatte.scentproduct.application.InterestService;
 import com.choulatte.scentproduct.application.ProductService;
 import com.choulatte.scentproduct.dto.InterestDTO;
 import com.choulatte.scentproduct.dto.ProductDTO;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,18 +22,27 @@ public class InterestController {
     private final ProductService productService;
 
     @GetMapping(value = "")
+    @ApiOperation(value = "사용자별 관심 상품 조회", notes = "각 사용자별로 관심있는 상품의 목록을 조회합니다.")
+    @ApiImplicitParam(name = "User-Idx", value = "사용자 고유 식별 번호 (user_idx)")
     ResponseEntity<List<ProductDTO>> getUserInterestingProducts(@RequestHeader("User-Idx") String userId) {
         return ResponseEntity.ok(interestService.getUserInterestingProduct(Long.parseLong(userId)));
     }
 
     @PostMapping(value = "")
-    void setInterest(@RequestBody InterestDTO interestDTO) {
-        interestService.createInterest(interestDTO);
+    @ApiOperation(value = "관심 상품 등록", notes = "관심 상품을 등록합니다.")
+    @ApiImplicitParam(name = "User-Idx", value = "사용자 고유 식별 번호 (user_idx)")
+    void setInterest(@RequestBody InterestDTO interestDTO, @RequestHeader("User-Idx") String userId) {
+        interestService.createInterest(interestDTO.setUserId(Long.parseLong(userId)));
     }
 
-    @DeleteMapping(value = "/{id}")
-    void deleteInterest(@PathVariable("id") Long id, @RequestHeader("User-Idx") String userId) {
-        interestService.deleteInterest(Long.parseLong(userId), id);
+    @DeleteMapping(value = "/{productId}")
+    @ApiOperation(value = "관심 상품 삭제", notes = "등록한 관심 상품을 삭제합니다.")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "User-Idx", value = "사용자 고유 식별 번호 (user_idx)", required = true),
+            @ApiImplicitParam(name = "productId", value = "상품 번호", required = true)
+    })
+    void deleteInterest(@PathVariable("productId") Long productId, @RequestHeader("User-Idx") String userId) {
+        interestService.deleteInterest(Long.parseLong(userId), productId);
     }
 
 }
