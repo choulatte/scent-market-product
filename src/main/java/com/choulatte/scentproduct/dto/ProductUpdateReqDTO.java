@@ -16,7 +16,7 @@ public class ProductUpdateReqDTO {
     private Long productId;
     private String productName;
     private String productDetail;
-    private Double startingPrice;
+    private Long startingPrice;
     private Date startingDatetime;
     private Date endingDatetime;
     private Long brandId;

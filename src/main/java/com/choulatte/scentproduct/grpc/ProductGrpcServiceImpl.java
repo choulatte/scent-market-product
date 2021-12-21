@@ -1,13 +1,18 @@
 package com.choulatte.scentproduct.grpc;
 
+import com.choulatte.scentproduct.application.BiddingService;
 import com.choulatte.scentproduct.application.PendingService;
 import com.choulatte.scentproduct.application.ProductService;
+import com.choulatte.scentproduct.dto.ProductDetailResDTO;
 import com.choulatte.scentproduct.exception.OngoingProductPresentException;
+import com.choulatte.scentproduct.exception.ProductBadRequestException;
 import com.choulatte.scentproduct.exception.ProductInvalidatingException;
+import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -16,6 +21,7 @@ public class ProductGrpcServiceImpl extends ProductServiceGrpc.ProductServiceImp
 
     private final ProductService productService;
     private final PendingService pendingService;
+    private final BiddingService biddingService;
 
     @Override
     public void doUserProductsPending(ProductServiceOuterClass.ProductsPendingRequest request, StreamObserver<ProductServiceOuterClass.ProductsPendingResponse> responseObserver) {
@@ -66,5 +72,21 @@ public class ProductGrpcServiceImpl extends ProductServiceGrpc.ProductServiceImp
                     .setResult(ProductServiceOuterClass.ProductsPendingResponse.Result.CONFLICT).build());
         }
         responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getProductDetail(ProductServiceOuterClass.ProductDetailRequest request, StreamObserver<ProductServiceOuterClass.ProductDetailResponse> responseObserver) {
+        try {
+            ProductDetailResDTO productDetailResDTO = biddingService.getProductDetail(request.getProductId());
+
+            responseObserver.onNext(ProductServiceOuterClass.ProductDetailResponse.newBuilder()
+                    .setStatus(ProductServiceOuterClass.ProductDetailResponse.Status.OK)
+                    .setStartingPrice(productDetailResDTO.getStartingPrice())
+                    .setStartingDatetime(Timestamp.newBuilder().setSeconds(productDetailResDTO.getStartingDatetime().getTime() * 1000).build())
+                    .setEndingDatetime(Timestamp.newBuilder().setSeconds(productDetailResDTO.getEndingDatetime().getTime() * 1000).build()).build());
+        } catch (ProductBadRequestException e) {
+            responseObserver.onNext(ProductServiceOuterClass.ProductDetailResponse.newBuilder()
+                    .setStatus(ProductServiceOuterClass.ProductDetailResponse.Status.INVALID).build());
+        }
     }
 }

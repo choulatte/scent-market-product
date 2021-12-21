@@ -1,6 +1,7 @@
 package com.choulatte.scentproduct.domain;
 
 import com.choulatte.scentproduct.dto.ProductDTO;
+import com.choulatte.scentproduct.dto.ProductDetailResDTO;
 import com.choulatte.scentproduct.dto.ProductUpdateReqDTO;
 import com.choulatte.scentproduct.exception.ProductBadRequestException;
 import com.choulatte.scentproduct.exception.ProductIllegalStateException;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +43,7 @@ public class Product {
     private String username;
 
     @Column(nullable = false, name = "start_price")
-    private Double startingPrice;
+    private Long startingPrice;
 
     @Column(nullable = false, name = "register_datetime")
     @Temporal(TemporalType.TIMESTAMP)
@@ -181,6 +183,14 @@ public class Product {
                 .validity(this.validity).visibility(this.visibility)
                 .status(this.status)
                 .brandId(this.brand.getBrandId()).build();
+    }
+
+    public ProductDetailResDTO toProductDetailResDTO() {
+        return ProductDetailResDTO.builder()
+                .startingDatetime(this.startingDatetime)
+                .endingDatetime(this.endingDatetime)
+                .startingPrice(this.startingPrice)
+                .build();
     }
 
     public enum StatusType {

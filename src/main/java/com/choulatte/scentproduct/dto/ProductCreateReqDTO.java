@@ -31,7 +31,7 @@ public class ProductCreateReqDTO {
     private String username;
 
     @ApiModelProperty(value = "시작가", required = true, example = "100000", notes = "정해진 호가 단위에 따라야 합니다.", position = 5)
-    private Double startingPrice;
+    private Long startingPrice;
 
     @ApiModelProperty(value = "경매 시작 시간", required = true, position = 6)
     private Date startingDatetime;

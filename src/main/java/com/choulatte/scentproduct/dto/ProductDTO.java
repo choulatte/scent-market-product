@@ -16,7 +16,7 @@ public class ProductDTO {
     private String productDetail;
     private Long userId;
     private String username;
-    private Double startingPrice;
+    private Long startingPrice;
     private Date registerDatetime;
     private Date lastModifiedDatetime;
     private Date startingDatetime;
