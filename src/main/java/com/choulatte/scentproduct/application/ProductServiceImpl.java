@@ -70,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Cacheable(value = "brandProducts", key = "#brandId", condition = "#pageable.pageNumber == 0")
+    @Cacheable(value = "brandProducts", key = "#brandName", condition = "#pageable.pageNumber == 0")
     public ProductPageDTO getBrandProductPage(String brandName, Pageable pageable) {
         return getProductsPageDTO(productRepository.findAllByBrandBrandNameAndVisibilityTrue(brandName, pageable), pageable);
     }
@@ -156,7 +156,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override // Delete랑 합치는거 고려해보기~
     @Caching(evict = {
-            @CacheEvict(value = "product", key = "#productId"),
+            // @CacheEvict(value = "product", key = "#productId"),
             @CacheEvict(value = "userProducts", key = "#userId"),
             @CacheEvict(value = "allProducts", allEntries = true),
             @CacheEvict(value = "statusProducts", allEntries = true), // 해당 상품의 상태가 뭐였는지 알 수 없음. 알고싶으면 dto 만들어야함
