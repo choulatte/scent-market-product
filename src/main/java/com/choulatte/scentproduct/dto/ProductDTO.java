@@ -17,6 +17,7 @@ public class ProductDTO {
     private Long userId;
     private String username;
     private Long startingPrice;
+    private Long interestCount;
     private Date registerDatetime;
     private Date lastModifiedDatetime;
     private Date startingDatetime;
@@ -32,6 +33,7 @@ public class ProductDTO {
                 .productDetail(this.productDetail)
                 .userId(this.userId).username(this.username)
                 .startingPrice(this.startingPrice)
+                .interestCount(this.interestCount)
                 .startingDatetime(this.startingDatetime)
                 .endingDatetime(this.endingDatetime)
                 .registeredDatetime(this.registerDatetime)

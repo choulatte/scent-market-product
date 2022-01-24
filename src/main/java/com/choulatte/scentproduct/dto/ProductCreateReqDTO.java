@@ -48,6 +48,7 @@ public class ProductCreateReqDTO {
                 .productDetail(this.productDetail)
                 .userId(this.userId).username(this.username)
                 .startingPrice(this.startingPrice)
+                .interestCount(0L)
                 .startingDatetime(this.startingDatetime)
                 .endingDatetime(this.endingDatetime)
                 .registeredDatetime(new Date())

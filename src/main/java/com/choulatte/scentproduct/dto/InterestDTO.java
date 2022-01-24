@@ -2,6 +2,7 @@ package com.choulatte.scentproduct.dto;
 
 import com.choulatte.scentproduct.domain.Interest;
 import com.choulatte.scentproduct.domain.Product;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.*;
 
 import java.util.Date;
@@ -23,6 +24,7 @@ public class InterestDTO {
 
     public Interest toEntity(Product product) {
         return Interest.builder().interestId(this.interestId)
+                .validity(true)
                 .userId(this.userId)
                 .product(product)
                 .registeredDatetime(new Date()).build();

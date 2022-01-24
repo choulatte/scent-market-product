@@ -6,13 +6,14 @@ import com.choulatte.scentproduct.dto.ProductUpdateReqDTO;
 import com.choulatte.scentproduct.exception.ProductBadRequestException;
 import com.choulatte.scentproduct.exception.ProductIllegalStateException;
 import com.choulatte.scentproduct.exception.UserNotValidException;
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +45,10 @@ public class Product {
 
     @Column(nullable = false, name = "start_price")
     private Long startingPrice;
+
+    @Column(nullable = false, name = "interest_count")
+    @ColumnDefault("0")
+    private Long interestCount;
 
     @Column(nullable = false, name = "register_datetime")
     @Temporal(TemporalType.TIMESTAMP)
@@ -77,7 +82,6 @@ public class Product {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private final List<Image> images = new ArrayList<>();
-
 
     public Product createProduct(Long userIdx, String username) {
         if(!this.userId.equals(userIdx) || !this.username.equals(username)) throw new UserNotValidException();
@@ -193,6 +197,12 @@ public class Product {
                 .build();
     }
 
+    public Product updateInterestCount(InterestOperation operation) {
+        if(operation == InterestOperation.INCREMENT) this.interestCount ++;
+        if(operation == InterestOperation.DECREMENT) this.interestCount --;
+        return this;
+    }
+
     public enum StatusType {
         REGISTERED,
         ONGOING,
@@ -202,5 +212,10 @@ public class Product {
         CLOSED,
         PENDING,
         DELETED
+    }
+
+    public enum InterestOperation {
+        INCREMENT,
+        DECREMENT
     }
 }

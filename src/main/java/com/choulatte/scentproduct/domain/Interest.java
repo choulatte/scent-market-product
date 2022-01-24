@@ -1,6 +1,7 @@
 package com.choulatte.scentproduct.domain;
 
 import com.choulatte.scentproduct.dto.InterestDTO;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +23,9 @@ public class Interest {
     @Column(name = "interest_idx")
     private Long interestId;
 
+    @Column(name = "validity")
+    private Boolean validity;
+
     @Column(name = "user_idx")
     private Long userId;
 
@@ -38,5 +42,10 @@ public class Interest {
                 .userId(this.userId)
                 .productId(this.product.getProductId())
                 .registeredDatetime(this.registeredDatetime).build();
+    }
+
+    public Interest makeInvalid() {
+        this.validity = false;
+        return this;
     }
 }

@@ -19,21 +19,22 @@ import java.util.stream.Collectors;
 public class InterestServiceImpl implements InterestService {
 
     private final InterestRepository interestRepository;
-    private final ProductRepository productRepository;
+    private final ProductServiceImpl productService;
 
     @Override
     public InterestDTO createInterest(InterestDTO interestDTO) {
-        return interestRepository.save(interestDTO.toEntity(getProduct(interestDTO.getProductId()))).toDTO();
+        return interestRepository.save(interestDTO.toEntity(productService.updateProductInterestCount(interestDTO.getProductId(), Product.InterestOperation.INCREMENT))).toDTO();
     }
 
     @Override
     public void deleteInterest(Long userId, Long productId) {
+        productService.updateProductInterestCount(productId, Product.InterestOperation.DECREMENT);
         interestRepository.delete(getInterestByUserIdAndProductId(userId, productId));
     }
 
     @Override
     public List<Long> getInterestedUser(Long productId) {
-        return interestRepository.findAllByProductProductId(productId);
+        return interestRepository.findAllByProductProductIdAndValidityFalse(productId);
     }
 
     @Override
@@ -42,11 +43,11 @@ public class InterestServiceImpl implements InterestService {
                 .collect(Collectors.toList()).stream().map(Product::toDTO).collect(Collectors.toList());
     }
 
-    private Product getProduct(Long productId) {
-        return productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
-    }
-
     private Interest getInterestByUserIdAndProductId(Long userId, Long productId) {
         return interestRepository.findByUserIdAndProductProductId(userId, productId).orElseThrow(InterestNotFoundException::new);
+    }
+
+    public void deleteAllInterests(Long productId) {
+        interestRepository.saveAll(interestRepository.findAllByProductProductId(productId).stream().map(Interest::makeInvalid).collect(Collectors.toList()));
     }
 }
