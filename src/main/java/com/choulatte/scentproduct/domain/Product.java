@@ -161,7 +161,7 @@ public class Product {
         if(!this.status.equals(StatusType.PENDING)) throw new ProductIllegalStateException();
         this.status = StatusType.REGISTERED;
         this.lastModifiedDatetime = new Date();
-         return this;
+        return this;
     }
 
     public Product makeProductDelete(Long productId, Long userId){

@@ -9,7 +9,6 @@ import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
 @EnableCaching
-@EnableSwagger2
 @SpringBootApplication
 public class ScentProductApplication {
 
