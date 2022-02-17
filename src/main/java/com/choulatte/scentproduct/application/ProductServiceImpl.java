@@ -33,7 +33,6 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final BrandRepository brandRepository;
     private final PendingUserRepository pendingUserRepository;
-    private final InterestServiceImpl interestService;
 
     @Override
     @Caching(evict = {
@@ -113,7 +112,8 @@ public class ProductServiceImpl implements ProductService {
             @CacheEvict(value = "datetimeProducts", allEntries = true)
     })
     public void deleteProduct(Long productId, Long userId) {
-        interestService.deleteAllInterests(productId);
+        // TODO: 2022-02-17 interest 삭제에 대해서 생각해보기 
+        //interestService.deleteAllInterests(productId);
         productRepository.save(
                 productRepository.findByProductIdAndUserIdAndVisibilityTrue(productId, userId).orElseThrow(RuntimeException::new).makeProductDelete(productId, userId)
         );
@@ -151,8 +151,8 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
     }
 
-    public Product updateProductInterestCount(Long productId, Product.InterestOperation operation) {
-        return productRepository.save(getProduct(productId).updateInterestCount(operation));
+    public void updateProductInterestCount(Long productId, Product.InterestOperation operation) {
+        productRepository.save(getProduct(productId).updateInterestCount(operation));
     }
 
     public List<Long> makeProductPending(Long userId) {
