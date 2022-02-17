@@ -1,6 +1,8 @@
 package com.choulatte.scentproduct.domain;
 
 import com.choulatte.scentproduct.dto.InterestDTO;
+import com.choulatte.scentproduct.dto.InterestReqDTO;
+import com.choulatte.scentproduct.exception.UserNotValidException;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,23 +31,31 @@ public class Interest {
     @Column(name = "user_idx")
     private Long userId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "interesting_product")
-    private Product product;
+    @Column(name = "interesting_product_idx")
+    private Long productId;
 
     @Column(nullable = false, name = "register_datetime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date registeredDatetime;
 
-    public InterestDTO toDTO() {
-        return InterestDTO.builder().interestId(this.interestId)
-                .userId(this.userId)
-                .productId(this.product.getProductId())
-                .registeredDatetime(this.registeredDatetime).build();
+    public Interest createInterest(Long userId) {
+        if(!this.userId.equals(userId)) throw new UserNotValidException();
+        this.validity = true;
+        this.registeredDatetime = new Date();
+        return this;
     }
 
     public Interest makeInvalid() {
         this.validity = false;
         return this;
+    }
+
+    public InterestDTO toDTO() {
+        return InterestDTO.builder()
+                .interestId(this.interestId)
+                .productId(this.productId)
+                .userId(this.userId)
+                .registeredDatetime(this.registeredDatetime)
+                .build();
     }
 }

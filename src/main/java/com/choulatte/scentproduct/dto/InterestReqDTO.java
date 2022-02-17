@@ -2,8 +2,10 @@ package com.choulatte.scentproduct.dto;
 
 import com.choulatte.scentproduct.domain.Interest;
 import com.choulatte.scentproduct.domain.Product;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -11,19 +13,12 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Builder
-public class InterestDTO {
-    private Long interestId;
+public class InterestReqDTO {
     private Long userId;
     private Long productId;
-    private Date registeredDatetime;
-
-    public InterestDTO setUserId(Long userId) {
-        this.userId = userId;
-        return this;
-    }
 
     public Interest toEntity() {
-        return Interest.builder().interestId(this.interestId)
+        return Interest.builder()
                 .validity(true)
                 .userId(this.userId)
                 .productId(this.productId)
