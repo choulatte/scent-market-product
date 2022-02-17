@@ -1,6 +1,7 @@
 package com.choulatte.scentproduct.controller;
 
 import com.choulatte.scentproduct.application.BrandService;
+import com.choulatte.scentproduct.dto.BrandCreateAndUpdateReqDTO;
 import com.choulatte.scentproduct.dto.BrandDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,13 @@ public class BrandController {
     ResponseEntity<List<BrandDTO>> getBrandList() { return ResponseEntity.ok(brandService.getBrands()); }
 
     @PostMapping(value = "")
-    ResponseEntity<BrandDTO> setBrand(BrandDTO brandDTO) {
-        return ResponseEntity.ok(brandService.createBrand(brandDTO));
+    ResponseEntity<BrandDTO> setBrand(BrandCreateAndUpdateReqDTO brandCreateAndUpdateReqDTO) {
+        return ResponseEntity.ok(brandService.createBrand(brandCreateAndUpdateReqDTO));
     }
 
     @PutMapping(value = "")
-    ResponseEntity<BrandDTO> updateBrand(BrandDTO brandDTO) {
-        return ResponseEntity.ok(brandService.updateBrand(brandDTO));
+    ResponseEntity<BrandDTO> updateBrand(BrandCreateAndUpdateReqDTO brandCreateAndUpdateReqDTO) {
+        return ResponseEntity.ok(brandService.updateBrand(brandCreateAndUpdateReqDTO));
     }
 
 }
