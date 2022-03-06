@@ -108,13 +108,13 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductsBetweenDatetimePage(start, end, pageable));
     }
 
-    @PostMapping(value = "/cancel")
+    @PutMapping(value = "/cancel/{productId}")
     @ApiOperation(value = "경매 취소", notes = "등록한 상품의 경매를 취소합니다.")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "productId", value = "상품 번호"),
             @ApiImplicitParam(name = "User-Idx", value = "사용자 고유 식별 번호 (user_idx)")
     })
-    ResponseEntity<ProductDTO> cancelProductBidding(@RequestParam("productId") Long productId, @RequestHeader("User-Idx") String userId) {
+    ResponseEntity<ProductDTO> cancelProductBidding(@PathVariable("productId") Long productId, @RequestHeader("User-Idx") String userId) {
         return ResponseEntity.ok(productService.cancelProductBidding(productId, Long.parseLong(userId)));
     }
 
