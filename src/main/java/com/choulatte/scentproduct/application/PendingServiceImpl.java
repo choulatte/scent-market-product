@@ -28,6 +28,11 @@ public class PendingServiceImpl implements PendingService {
         pendingUserRepository.delete(getPendingUser(userId));
     }
 
+    @Override
+    public boolean isPresent(Long userId) {
+        return pendingUserRepository.findByUserId(userId).isPresent();
+    }
+
     private PendingUser getPendingUser(Long userId) {
         return pendingUserRepository.findByUserId(userId).orElseThrow(PendingUserException::new);
     }

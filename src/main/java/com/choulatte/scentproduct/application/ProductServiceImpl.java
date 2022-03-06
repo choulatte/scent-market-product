@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final BrandRepository brandRepository;
-    private final PendingUserRepository pendingUserRepository;
+    private final PendingService pendingService;
 
     @Override
     @Caching(evict = {
@@ -45,14 +45,14 @@ public class ProductServiceImpl implements ProductService {
             @CachePut(value = "product", key = "#result.productId")
             })
     public ProductDTO createProduct(ProductCreateReqDTO productCreateReqDTO, Long userId, String username) {
-        if(verifyUserIsPending(userId)) throw new PendingUserException();
+        if(pendingService.isPresent(userId)) throw new PendingUserException();
         return productRepository.save(productCreateReqDTO.toEntity(getBrand(productCreateReqDTO.getBrandId())).createProduct(userId, username)).toDTO();
     }
 
     @Override
     @Cacheable(value = "userProducts", key = "#userId", condition = "#pageable.pageNumber == 0")
     public ProductPageDTO getUserProductPage(Long userId, Pageable pageable) {
-        if(verifyUserIsPending(userId)) throw new PendingUserException();
+        if(pendingService.isPresent(userId)) throw new PendingUserException();
         return getProductsPageDTO(productRepository.findAllByUserIdAndVisibilityTrue(userId, pageable), pageable);
     }
 
@@ -172,11 +172,6 @@ public class ProductServiceImpl implements ProductService {
         List<Product> userProducts = getUserProducts(userId);
 
         productRepository.saveAll(userProducts.stream().map(product -> product.makeProductDelete(product.getProductId(), userId)).collect(Collectors.toList()));
-    }
-
-
-    private Boolean verifyUserIsPending(Long userId) {
-        return pendingUserRepository.findByUserId(userId).isPresent();
     }
 
     public Boolean checkUserProductOngoing(Long userId) {
